@@ -89,3 +89,6 @@ input[type=range] { accent-color: var(--accent); }
   .sim-layout { grid-template-columns: 1fr; }
   .hud { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* 라벨용 글꼴 */
+.sim-notice, .hud .cell small, .panel h2, .btn, .grade, .policy em, .meter-label, .scenario span, .policy span, label.field, .legend, .log b { font-family: var(--font-label); }

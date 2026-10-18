@@ -122,3 +122,11 @@
     .chip small { opacity: .7; margin-left: 4px; }
     .kw { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
     .kw span { padding: 2px 8px; border-radius: 6px; background: rgba(140,21,21,.08); color: var(--accent); font-size: .72rem; font-weight: 700; }
+
+    /* 라벨·메타 정보용 글꼴 (본문·제목은 기본 글꼴 유지) */
+    :root { --font-label: "Source Sans 3", Inter, Pretendard, -apple-system, "Segoe UI", sans-serif; }
+    .brand { font-family: var(--font-label); font-weight: 800; letter-spacing: .1em; font-size: 1.05rem; }
+    .nav-links, .eyebrow, .button, .text-link, .tag, .step-number, .journal-item time,
+    .post-meta, .chip, .kw span, footer { font-family: var(--font-label); }
+    .nav-links { font-weight: 600; font-size: .95rem; }
+    .eyebrow, .tag, .chip, .kw span { font-weight: 700; }
