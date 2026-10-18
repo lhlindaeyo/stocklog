@@ -14,7 +14,7 @@ summary: 이 사이트에 글을 올리는 방법과 첫 기록.
 | `posts/note/` | 종목·자산 분석 기록 | Note |
 | `posts/method/` | 분석 방법론 (논문 기반, 수식 포함) | Method |
 
-1. 해당 폴더의 `_template.md`를 복사해서 `_`가 없는 이름으로 저장합니다. (예: `posts/note/samsung-2026q3.md`)
+1. 해당 폴더의 `_stock_template.md`(종목 분석), `_industry_template.md`(산업 구조), `_market_template.md`(시장 분석) 중 하나를 복사해서 `_`가 없는 이름으로 저장합니다. (예: `posts/note/samsung-2026q3.md`)
 2. 내용을 채우고 `git push` 합니다.
 
 파일명이 `_`로 시작하는 파일은 목록에 나오지 않습니다.

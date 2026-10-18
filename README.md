@@ -10,7 +10,9 @@
 index.html, list.html, post.html   # 페이지 (홈 / 목록 / 글 보기)
 assets/                            # CSS, 파비콘
 posts/
-  note/_template.md                # Note 템플릿 (Question → Conclusion)
+  note/_stock_template.md          # Note 템플릿 - 종목 분석 (Question → Conclusion)
+  note/_industry_template.md       # Note 템플릿 - 산업 구조 (부품별 카드)
+  note/_market_template.md         # Note 템플릿 - 시장 분석 (정책/금리: 사건 → 배경 → 전망)
   method/_template.md              # Method 템플릿 (논문 기반, 수식 포함)
   index.json                       # 자동 생성 (직접 수정 X)
 tools/build_posts.py               # index.json 생성 스크립트
@@ -18,7 +20,7 @@ tools/build_posts.py               # index.json 생성 스크립트
 
 ## 글 올리기
 
-1. `posts/note/` 또는 `posts/method/`의 `_template.md`를 복사해 `_` 없는 이름으로 저장 (예: `posts/method/fama-french-3.md`)
+1. `posts/note/`(`_stock_template.md` / `_industry_template.md` / `_market_template.md`) 또는 `posts/method/`(`_template.md`)의 템플릿을 복사해 `_` 없는 이름으로 저장 (예: `posts/method/fama-french-3.md`)
 2. 아래 세 줄을 실행합니다. 커밋할 때 `posts/index.json`이 자동으로 갱신되어 함께 올라가고, 1분쯤 뒤 사이트에 반영됩니다.
 
 ```bash
