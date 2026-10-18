@@ -47,7 +47,7 @@
         document.getElementById('back').href = 'list.html?type=' + slug.split('/')[0];
         document.title = (meta.title || slug) + ' | Investment Log';
         document.getElementById('title').textContent = meta.title || slug;
-        document.getElementById('meta').textContent = [meta.date && meta.date.replace(/-/g, '.'), meta.tag && meta.tag.toUpperCase()].filter(Boolean).join(' · ');
+        document.getElementById('meta').textContent = [meta.date && meta.date.replace(/-/g, '.'), slug.split('/')[0].toUpperCase()].filter(Boolean).join(' · ');
         const maths = [];
         const stash = (src, display) => '@@MATH' + (maths.push({ src, display }) - 1) + '@@';
         const prepared = md

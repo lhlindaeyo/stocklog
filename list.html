@@ -24,7 +24,7 @@
   <main class="container post">
     <div class="eyebrow" id="eyebrow"></div>
     <h1 id="title" style="font-size:clamp(2rem,5vw,3rem)"></h1>
-    <p class="hero-copy" id="desc" style="margin-bottom:28px"></p>
+    <div class="chips" id="chips"></div>
     <div class="journal-list" id="list"><p class="empty">불러오는 중…</p></div>
   </main>
   <footer>
@@ -32,28 +32,49 @@
   </footer>
   <script>
     const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-    const INFO = {
-      note: ['Note', '종목·자산 분석 기록 — Question부터 Conclusion까지'],
-      method: ['Method', '여러 가지 분석 방법론 정리']
-    };
+    const NAMES = { note: 'Note', method: 'Method' };
     const type = new URLSearchParams(location.search).get('type') === 'method' ? 'method' : 'note';
-    document.title = INFO[type][0] + ' | Investment Log';
-    document.getElementById('eyebrow').textContent = 'All ' + INFO[type][0];
-    document.getElementById('title').textContent = INFO[type][0];
-    document.getElementById('desc').textContent = INFO[type][1];
+    document.title = NAMES[type] + ' | Investment Log';
+    document.getElementById('eyebrow').textContent = 'All ' + NAMES[type];
+    document.getElementById('title').textContent = NAMES[type];
     document.querySelectorAll('.nav-links a').forEach(a => {
       if (a.getAttribute('href') === 'list.html?type=' + type) a.style.color = 'var(--purple-light)';
     });
-    fetch('posts/index.json').then(r => r.json()).then(posts => {
+    const params = new URLSearchParams(location.search);
+    let current = params.get('k') || '';
+    const setKeyword = k => {
+      current = k;
+      const q = new URLSearchParams({ type });
+      if (k) q.set('k', k);
+      history.pushState(null, '', '?' + q);
+      draw();
+    };
+    let items = [];
+    function draw() {
+      const counts = {};
+      items.forEach(p => p.keywords.forEach(k => counts[k] = (counts[k] || 0) + 1));
+      const keys = Object.keys(counts).sort((a, b) => counts[b] - counts[a] || a.localeCompare(b, 'ko'));
+      const chips = document.getElementById('chips');
+      chips.innerHTML = keys.length
+        ? [['', '전체', items.length], ...keys.map(k => [k, k, counts[k]])]
+            .map(([k, label, n]) => `<button class="chip${k === current ? ' active' : ''}" data-k="${esc(k)}">${esc(label)}<small>${n}</small></button>`).join('')
+        : '';
+      chips.querySelectorAll('.chip').forEach(b => b.onclick = () => setKeyword(b.dataset.k));
       const el = document.getElementById('list');
-      const items = posts.filter(p => (p.type || 'note') === type);
-      if (!items.length) { el.innerHTML = '<p class="empty">아직 글이 없습니다.</p>'; return; }
-      el.innerHTML = items.map(p => `
+      const shown = current ? items.filter(p => p.keywords.includes(current)) : items;
+      if (!shown.length) { el.innerHTML = '<p class="empty">아직 글이 없습니다.</p>'; return; }
+      el.innerHTML = shown.map(p => `
         <a class="journal-item" href="post.html?p=${encodeURIComponent(p.slug)}">
-          <time datetime="${esc(p.date)}">${esc(p.date.replace(/-/g, '.'))}${p.tag ? ' · ' + esc(p.tag.toUpperCase()) : ''}</time>
-          <div><h3>${esc(p.title)}</h3>${p.summary ? `<p>${esc(p.summary)}</p>` : ''}</div>
+          <time datetime="${esc(p.date)}">${esc(p.date.replace(/-/g, '.'))}</time>
+          <div><h3>${esc(p.title)}</h3>${p.summary ? `<p>${esc(p.summary)}</p>` : ''}
+            ${p.keywords.length ? `<div class="kw">${p.keywords.map(k => `<span>${esc(k)}</span>`).join('')}</div>` : ''}</div>
           <span class="arrow">↗</span>
         </a>`).join('');
+    }
+    window.addEventListener('popstate', () => { current = new URLSearchParams(location.search).get('k') || ''; draw(); });
+    fetch('posts/index.json').then(r => r.json()).then(posts => {
+      items = posts.filter(p => (p.type || 'note') === type);
+      draw();
     }).catch(() => {
       document.getElementById('list').innerHTML = '<p class="empty">글 목록을 불러오지 못했습니다. (로컬에서는 file:// 대신 서버로 여세요)</p>';
     });

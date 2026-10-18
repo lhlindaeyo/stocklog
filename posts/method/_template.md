@@ -1,7 +1,7 @@
 ---
 title: 모델 이름 (예: Fama-French 3-Factor Model)
 date: 2026-01-01
-tag: factor
+keywords: 팩터모델, 자산가격결정
 summary: 목록에 보일 한 줄 요약
 ---
 

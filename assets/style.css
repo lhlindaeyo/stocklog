@@ -115,3 +115,10 @@
     .interest p { margin: 0; font-size: .88rem; }
     .about-box.column { flex-direction: column; align-items: stretch; }
     @media (max-width: 760px) { .interest-grid { grid-template-columns: 1fr; } }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 28px; }
+    .chip { padding: 6px 13px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--muted); font: inherit; font-size: .84rem; cursor: pointer; }
+    .chip:hover { border-color: var(--purple); color: var(--purple-light); }
+    .chip.active { background: var(--purple); border-color: var(--purple); color: #0b0913; font-weight: 700; }
+    .chip small { opacity: .7; margin-left: 4px; }
+    .kw { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .kw span { padding: 2px 8px; border-radius: 6px; background: rgba(155,123,255,.13); color: var(--purple-light); font-size: .72rem; font-weight: 700; }

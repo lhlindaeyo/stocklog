@@ -4,7 +4,9 @@
     "title": "Investment Log를 시작합니다",
     "date": "2026-10-18",
     "type": "note",
-    "tag": "guide",
+    "keywords": [
+      "가이드"
+    ],
     "summary": "이 사이트에 글을 올리는 방법과 첫 기록."
   }
 ]

@@ -24,3 +24,5 @@ tools/build_posts.py               # index.json 생성 스크립트
 Method 글에서는 수식을 `$...$`(문장 속), `$$...$$`(별행)로 쓸 수 있습니다. 달러 금액은 `\$`로 씁니다.
 
 로컬에서 확인할 때는 `python tools/build_posts.py` 실행 후 `python -m http.server`로 여세요.
+
+글 맨 위의 `keywords: 반도체, 가치평가`처럼 쉼표로 키워드를 적으면, Note/Method 목록 페이지의 제목 아래에 키워드 버튼이 생기고 누르면 해당 키워드의 글만 모아 볼 수 있습니다.
