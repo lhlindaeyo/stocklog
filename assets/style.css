@@ -76,7 +76,6 @@
     @media (max-width: 760px) {
       .nav { min-height: 64px; }
       .nav-links { gap: 13px; font-size: .8rem; }
-      .nav-links a:nth-child(3) { display: none; }
       .hero { padding: 75px 0 65px; }
       section { padding: 58px 0; }
       .grid { grid-template-columns: 1fr; }
