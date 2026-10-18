@@ -10,7 +10,7 @@ window.SIM_MODEL = {
   /* ---------- 1. 경제 주체 (노드) ---------- */
   nodes: [
     {
-      id: 'firm', label: '기업', letter: 'F', x: 320, y: 78,
+      id: 'firm', label: '기업', letter: 'F', x: 320, y: 150,
       weight: 0.3, // 시스템 안정도 계산 시 가중치 (합계 1)
       desc: '재화·서비스를 생산하고 은행·투자자로부터 자금을 조달합니다.',
       // TODO: 실제 지표 식으로 교체. v = 현재 스트레스(0~100)
@@ -20,7 +20,7 @@ window.SIM_MODEL = {
       ],
     },
     {
-      id: 'bank', label: '은행', letter: 'B', x: 108, y: 232,
+      id: 'bank', label: '은행', letter: 'B', x: 118, y: 282,
       weight: 0.3,
       desc: '예금을 받아 기업에 대출하고 국채를 보유하는 신용 공급자입니다.',
       metrics: [
@@ -29,7 +29,7 @@ window.SIM_MODEL = {
       ],
     },
     {
-      id: 'investor', label: '투자자', letter: 'I', x: 532, y: 232,
+      id: 'investor', label: '투자자', letter: 'I', x: 522, y: 282,
       weight: 0.2,
       desc: '주식·채권 등 자산에 투자하고 기업과 국가에 자금을 공급합니다.',
       metrics: [
@@ -38,7 +38,7 @@ window.SIM_MODEL = {
       ],
     },
     {
-      id: 'state', label: '국가', letter: 'S', x: 320, y: 386,
+      id: 'state', label: '국가', letter: 'S', x: 320, y: 392,
       weight: 0.2,
       desc: '재정과 통화 정책으로 경제 전체를 조율하고 세금·국채로 자금을 운용합니다.',
       metrics: [

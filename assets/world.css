@@ -24,10 +24,10 @@
 .world .tag text { font-family: var(--font-label); font-size: 13px; font-weight: 700; fill: var(--ink); }
 .world .char:hover .tag rect, .world .char:focus .tag rect { fill: var(--accent); stroke: var(--accent); }
 .world .char:hover .tag text, .world .char:focus .tag text { fill: #fff; }
-.world .smoke circle { fill: #fff; opacity: 0; animation: puff 3s ease-out infinite; }
+.smoke circle { fill: #fff; opacity: 0; animation: puff 3s ease-out infinite; }
 @keyframes puff { 0% { opacity: .85; transform: translateY(0) scale(.7); } 100% { opacity: 0; transform: translateY(-26px) scale(1.5); } }
-.world .smoke circle { transform-box: fill-box; transform-origin: center; }
-.world .bob { animation: coin 2.4s ease-in-out infinite; }
+.smoke circle { transform-box: fill-box; transform-origin: center; }
+.bob { animation: coin 2.4s ease-in-out infinite; }
 @keyframes coin { 50% { transform: translateY(-5px); } }
 
 @media (prefers-reduced-motion: reduce) {

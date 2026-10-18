@@ -124,10 +124,38 @@
   const svg = $('graph');
   const nodeEls = {}, edgeEls = [];
 
+  function platform() {
+    const { poly } = window.Chars;
+    const c = [320, 296];
+    const ring = [[320, 92], [469, 194], [618, 296], [469, 398], [320, 500], [171, 398], [22, 296], [171, 194]];
+    const tones = ['#efd49d', '#e6c48a', '#f3ddaa', '#dcb677'];
+    let out = '';
+    ring.forEach((p, i) => out += poly([c, p, ring[(i + 1) % 8]], tones[i % 4]));
+    // 앞쪽 테두리 + 아래쪽 뿔
+    const top = [ring[6], ring[5], ring[4], ring[3], ring[2]];
+    const bot = [[22, 322], [171, 424], [320, 526], [469, 424], [618, 322]];
+    const lo = [[110, 430], [210, 494], [320, 546], [430, 494], [530, 430]], apex = [326, 612];
+    const rim = ['#d2a56a', '#c18f55', '#b58049', '#c99a5f'];
+    const brown = ['#8a4b37', '#74392a', '#9a5740', '#6a3326', '#80402f', '#a05d44'];
+    let under = '', edge = '';
+    for (let i = 0; i < 4; i++) {
+      under += poly([bot[i], bot[i + 1], lo[i]], brown[(i * 2) % 6]) + poly([bot[i + 1], lo[i + 1], lo[i]], brown[(i * 2 + 1) % 6]) + poly([lo[i], lo[i + 1], apex], brown[(i + 3) % 6]);
+      edge += poly([top[i], top[i + 1], bot[i + 1], bot[i]], rim[i]);
+    }
+    return under + edge + out;
+  }
+
   function buildGraph() {
     const defs = el('defs', {}, svg);
+    const sky = el('linearGradient', { id: 'simSky', x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
+    el('stop', { offset: 0, 'stop-color': '#bcd4e6' }, sky);
+    el('stop', { offset: 1, 'stop-color': '#eaf1f5' }, sky);
     const mk = el('marker', { id: 'arrow', viewBox: '0 0 10 10', refX: 9, refY: 5, markerWidth: 7, markerHeight: 7, orient: 'auto-start-reverse' }, defs);
     el('path', { d: 'M0 0L10 5L0 10z', fill: '#8a807d' }, mk);
+
+    el('rect', { width: 640, height: 640, rx: 12, fill: 'url(#simSky)' }, svg);
+    const plat = el('g', { class: 'platform' }, svg);
+    plat.innerHTML = platform();
 
     M.edges.forEach(e => {
       const a = nodeById[e.from], b = nodeById[e.to];
@@ -143,20 +171,24 @@
       edgeEls.push({ e, path });
     });
 
-    M.nodes.forEach(n => {
+    // 뒤쪽(y가 작은) 캐릭터부터 그려서 겹침 순서를 맞춘다
+    [...M.nodes].sort((p, q) => p.y - q.y).forEach(n => {
       const g = el('g', { class: 'node', tabindex: 0, role: 'button', 'aria-label': n.label }, svg);
-      g.setAttribute('transform', `translate(${n.x} ${n.y})`);
-      const pulse = el('circle', { r: R, class: 'pulse' }, g);
-      const c = el('circle', { r: R, class: 'body' }, g);
-      const ring = el('circle', { r: R + 6, class: 'sel' }, g);
-      const letter = el('text', { y: -4, class: 'letter' }, g);
-      letter.textContent = n.letter;
-      const name = el('text', { y: 18, class: 'name' }, g);
+      g.setAttribute('transform', `translate(${n.x} ${n.y + 30}) scale(1.25)`);
+      const aura = el('ellipse', { cx: 0, cy: 4, rx: 66, ry: 24, class: 'aura' }, g);
+      const pulse = el('ellipse', { cx: 0, cy: 4, rx: 66, ry: 24, class: 'pulse' }, g);
+      const ring = el('ellipse', { cx: 0, cy: 4, rx: 78, ry: 30, class: 'sel' }, g);
+      const inner = el('g', { class: 'char-in' }, g);
+      inner.innerHTML = window.Chars[n.id]();
+      const tagBg = el('rect', { x: -30, y: 34, width: 60, height: 22, rx: 11, class: 'tagbg' }, g);
+      const name = el('text', { y: 49.5, class: 'name' }, g);
       name.textContent = n.label;
-      const val = el('text', { y: R + 22, class: 'val' }, g);
+      el('rect', { x: -34, y: 62, width: 68, height: 6, rx: 3, class: 'barbg' }, g);
+      const bar = el('rect', { x: -34, y: 62, width: 0, height: 6, rx: 3, class: 'barfill' }, g);
+      const val = el('text', { y: 84, class: 'val' }, g);
       g.addEventListener('click', () => select(n.id));
       g.addEventListener('keydown', ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); select(n.id); } });
-      nodeEls[n.id] = { g, c, pulse, ring, letter, name, val };
+      nodeEls[n.id] = { g, aura, pulse, ring, inner, name, val, bar };
     });
   }
 
@@ -183,10 +215,11 @@
     // 노드
     M.nodes.forEach(n => {
       const v = S.x[n.id], t = v / 100, o = nodeEls[n.id];
-      o.c.style.fill = mix(t);
-      const dark = t > 0.5;
-      o.letter.style.fill = dark ? '#fff' : '#14100f';
-      o.name.style.fill = dark ? '#fff' : '#6a6361';
+      o.aura.style.fill = mix(t);
+      o.aura.style.opacity = 0.15 + t * 0.7;
+      o.inner.style.filter = `saturate(${1 - t * 0.55}) drop-shadow(0 0 ${t * 9}px rgba(140,21,21,${t}))`;
+      o.g.classList.toggle('shaking', v > 60);
+      o.bar.setAttribute('width', (68 * t).toFixed(1));
       o.val.textContent = `스트레스 ${Math.round(v)}`;
       o.ring.style.opacity = n.id === selected ? 1 : 0;
       const hit = v - S.prev[n.id] > 3;
