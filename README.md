@@ -26,3 +26,7 @@ Method 글에서는 수식을 `$...$`(문장 속), `$$...$$`(별행)로 쓸 수 
 로컬에서 확인할 때는 `python tools/build_posts.py` 실행 후 `python -m http.server`로 여세요.
 
 글 맨 위의 `keywords: 반도체, 가치평가`처럼 쉼표로 키워드를 적으면, Note/Method 목록 페이지의 제목 아래에 키워드 버튼이 생기고 누르면 해당 키워드의 글만 모아 볼 수 있습니다.
+
+## 시뮬레이션
+
+`simulation.html`은 기업·은행·투자자·국가를 연결된 시스템으로 보고 외부 충격의 파급을 턴제 게임으로 보여줍니다. 수식·파라미터는 `assets/sim-model.js`만 수정하면 되고, 화면 코드는 `assets/sim.js`입니다. 관심사 소개는 `interests.md`를 수정하세요.

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulation | Investment Log</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <link rel="stylesheet" href="assets/sim.css" />
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="index.html#home" aria-label="Investment Log 홈">
+        <span class="brand-mark">I.</span><span>INVESTMENT LOG</span>
+      </a>
+      <nav class="nav-links" aria-label="주요 메뉴">
+        <a href="index.html#research">Research</a>
+        <a href="list.html?type=note">Note</a>
+        <a href="list.html?type=method">Method</a>
+        <a href="simulation.html">Simulation</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container sim">
+    <div class="eyebrow">Systemic Risk Game</div>
+    <h1>Simulation</h1>
+    <p class="hero-copy">기업·은행·투자자·국가를 하나의 연결된 시스템으로 보고, 외부 충격이 경제 전체로 어떻게 번지는지 턴제로 확인합니다. 정책 포인트로 개입해 시스템을 붕괴에서 지켜보세요.</p>
+    <div class="sim-notice">샘플 모델 — 현재 수식은 화면 확인용 임시 값입니다 (assets/sim-model.js)</div>
+
+    <div class="hud">
+      <div class="cell"><small>Turn</small><b id="turn">0</b><div class="progress"><i id="progress"></i></div></div>
+      <div class="cell"><small>시스템 안정도</small><b id="stab">100</b><span class="grade" id="grade">S</span><div class="bar"><i id="stabBar"></i></div></div>
+      <div class="cell"><small>정책 포인트 (PP)</small><b id="points">3</b></div>
+      <div class="cell"><small>목표</small><b style="font-size:1rem;line-height:1.5">20턴 버티기<br /><span class="muted" style="font-weight:400">안정도 15 미만이면 붕괴</span></b></div>
+    </div>
+
+    <div class="sim-layout">
+      <div>
+        <section class="panel">
+          <h2>1. 시나리오</h2>
+          <div class="scenarios" id="scenarios"></div>
+        </section>
+        <section class="panel">
+          <h2>2. 외부 충격</h2>
+          <label class="field">충격 종류<select id="shockSel"></select></label>
+          <p class="muted" id="shockDesc" style="margin-top:6px"></p>
+          <label class="field">강도 <output id="magV">5</output><input type="range" id="mag" min="1" max="10" value="5" /></label>
+          <label class="field">지속 기간 (턴) <output id="durV">3</output><input type="range" id="dur" min="1" max="5" value="3" /></label>
+          <button class="btn primary wide" id="shockBtn">충격 투입</button>
+          <p class="status" id="shockStatus"></p>
+        </section>
+        <section class="panel">
+          <h2>3. 정책 개입</h2>
+          <div class="policies" id="policies"></div>
+          <p class="queued" id="queued"></p>
+        </section>
+      </div>
+
+      <div>
+        <section class="panel">
+          <svg id="graph" viewBox="0 0 640 450" role="img" aria-label="기업, 은행, 투자자, 국가의 연결 관계 그래프"></svg>
+          <div class="controls">
+            <button class="btn primary" id="next">다음 턴 ▶</button>
+            <button class="btn" id="auto">⏵ 자동 재생</button>
+            <button class="btn" id="reset">리셋</button>
+          </div>
+        </section>
+        <section class="panel chart">
+          <h2>노드별 스트레스 추이</h2>
+          <svg id="chart" viewBox="0 0 600 190"></svg>
+          <div class="legend" id="legend"></div>
+        </section>
+      </div>
+
+      <div>
+        <section class="panel" id="detail"></section>
+        <section class="panel">
+          <h2>이벤트 로그</h2>
+          <ul class="log" id="log"></ul>
+        </section>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <div class="container footer-inner"><span>© 2026 INVESTMENT LOG</span><span>Independent research · Not financial advice</span></div>
+  </footer>
+
+  <div class="overlay" id="overlay" hidden>
+    <div class="box">
+      <h2 id="ovTitle"></h2>
+      <p id="ovBody"></p>
+      <button class="btn primary" id="again">다시 시작</button>
+    </div>
+  </div>
+
+  <script src="assets/sim-model.js"></script>
+  <script src="assets/sim.js"></script>
+</body>
+</html>
