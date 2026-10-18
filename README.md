@@ -6,7 +6,7 @@
 
 ## 글 올리기
 
-1. `posts/` 폴더에 `.md` 파일 추가 (맨 위에 `title`, `date`, `tag`, `summary` 작성 — `posts/welcome.md` 참고)
+1. `posts/` 폴더에 `.md` 파일 추가 — `posts/_template-note.md`(Note, Question→Conclusion 6단계) 또는 `posts/_template-method.md`(Method, 분석 방법)를 복사해서 사용. 맨 위 `type`이 `note`면 Note 섹션, `method`면 Method 섹션에 표시됩니다.
 2. `git push` — GitHub Actions가 `posts/index.json`을 자동 갱신합니다.
 
 로컬에서 확인할 때는 `python tools/build_posts.py` 실행 후 `python -m http.server`로 여세요.

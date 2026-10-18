@@ -19,11 +19,12 @@ def parse(path):
         "slug": path.stem,
         "title": meta.get("title", path.stem),
         "date": meta.get("date", "1970-01-01"),
+        "type": meta.get("type", "note"),
         "tag": meta.get("tag", ""),
         "summary": meta.get("summary", ""),
     }
 
 
-posts = sorted((parse(p) for p in POSTS.glob("*.md")), key=lambda p: p["date"], reverse=True)
+posts = sorted((parse(p) for p in POSTS.glob("*.md") if not p.name.startswith("_")), key=lambda p: p["date"], reverse=True)
 (POSTS / "index.json").write_text(json.dumps(posts, ensure_ascii=False, indent=2), encoding="utf-8")
 print(f"{len(posts)} posts")

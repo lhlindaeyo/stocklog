@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="주식, 부동산, 거시경제를 데이터와 논리로 분석하는 개인 투자 리서치 랩." />
   <title>Investment Log | Personal Research Journal</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="stylesheet" href="assets/style.css" />
 </head>
 <body>
@@ -15,7 +16,7 @@
       </a>
       <nav class="nav-links" aria-label="주요 메뉴">
         <a href="#research">Research</a>
-        <a href="#journal">Journal</a>
+        <a href="#note">Note</a>
         <a href="#method">Method</a>
         <a href="#about">About</a>
       </nav>
@@ -39,7 +40,7 @@
       <div class="container">
         <div class="section-heading">
           <div><h2>Research Areas</h2><p>관심 자산과 분석 주제</p></div>
-          <a class="text-link" href="#journal">모든 분석 보기 ↗</a>
+          <a class="text-link" href="#note">모든 노트 보기 ↗</a>
         </div>
         <div class="grid">
           <article class="card">
@@ -61,31 +62,21 @@
       </div>
     </section>
 
-    <section id="method">
-      <div class="container feature">
-        <div class="feature-intro">
-          <div class="eyebrow">Research Framework</div>
-          <h2>좋은 질문에서<br />투자 판단까지.</h2>
-          <p>모든 분석은 같은 구조로 작성해 아이디어를 검증하고, 나중에 판단이 맞았는지 돌아볼 수 있게 합니다.</p>
+    <section class="journal" id="note">
+      <div class="container">
+        <div class="section-heading">
+          <div><h2>Note</h2><p>종목·자산 분석 기록 — Question부터 Conclusion까지</p></div>
         </div>
-        <div class="steps">
-          <div class="step"><div class="step-number">01</div><div><h3>Question · 질문</h3><p>무엇을 설명하거나 예측하고 싶은가?</p></div></div>
-          <div class="step"><div class="step-number">02</div><div><h3>Thesis · 가설</h3><p>핵심 주장과 그 주장이 성립하는 조건은 무엇인가?</p></div></div>
-          <div class="step"><div class="step-number">03</div><div><h3>Evidence · 근거</h3><p>재무제표, 데이터, 논문, 공시가 가설을 뒷받침하는가?</p></div></div>
-          <div class="step"><div class="step-number">04</div><div><h3>Valuation · 가치평가</h3><p>적정 가치와 현재 가격 사이에 충분한 차이가 있는가?</p></div></div>
-          <div class="step"><div class="step-number">05</div><div><h3>Risks · 리스크</h3><p>어떤 전제가 틀리면 분석 결론이 바뀌는가?</p></div></div>
-          <div class="step"><div class="step-number">06</div><div><h3>Review · 회고</h3><p>결과를 확인하고 예측과 판단의 오류를 기록합니다.</p></div></div>
-        </div>
+        <div class="journal-list" id="note-list"><p class="empty">불러오는 중…</p></div>
       </div>
     </section>
 
-    <section class="journal" id="journal">
+    <section id="method">
       <div class="container">
         <div class="section-heading">
-          <div><h2>Latest Notes</h2><p>최근 분석과 투자 기록</p></div>
-          
+          <div><h2>Method</h2><p>분석 방법론 정리</p></div>
         </div>
-        <div class="journal-list" id="post-list"><p class="empty">불러오는 중…</p></div>
+        <div class="journal-list" id="method-list"><p class="empty">불러오는 중…</p></div>
       </div>
     </section>
 
@@ -116,8 +107,8 @@
 
   <script>
     const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-    fetch('posts/index.json').then(r => r.json()).then(posts => {
-      const el = document.getElementById('post-list');
+    const render = (id, posts) => {
+      const el = document.getElementById(id);
       if (!posts.length) { el.innerHTML = '<p class="empty">아직 글이 없습니다.</p>'; return; }
       el.innerHTML = posts.map(p => `
         <a class="journal-item" href="post.html?p=${encodeURIComponent(p.slug)}">
@@ -125,8 +116,14 @@
           <div><h3>${esc(p.title)}</h3>${p.summary ? `<p>${esc(p.summary)}</p>` : ''}</div>
           <span class="arrow">↗</span>
         </a>`).join('');
+    };
+    fetch('posts/index.json').then(r => r.json()).then(posts => {
+      render('note-list', posts.filter(p => p.type === 'note'));
+      render('method-list', posts.filter(p => p.type === 'method'));
     }).catch(() => {
-      document.getElementById('post-list').innerHTML = '<p class="empty">글 목록을 불러오지 못했습니다. (로컬에서는 file:// 대신 서버로 여세요)</p>';
+      document.querySelectorAll('.journal-list').forEach(el => {
+        el.innerHTML = '<p class="empty">글 목록을 불러오지 못했습니다. (로컬에서는 file:// 대신 서버로 여세요)</p>';
+      });
     });
   </script>
 </body>
