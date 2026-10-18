@@ -4,9 +4,23 @@
 
 - `index.html`: 정적 단일 페이지 사이트
 
+## 폴더 구조
+
+```
+index.html, list.html, post.html   # 페이지 (홈 / 목록 / 글 보기)
+assets/                            # CSS, 파비콘
+posts/
+  note/_template.md                # Note 템플릿 (Question → Conclusion)
+  method/_template.md              # Method 템플릿 (논문 기반, 수식 포함)
+  index.json                       # 자동 생성 (직접 수정 X)
+tools/build_posts.py               # index.json 생성 스크립트
+```
+
 ## 글 올리기
 
-1. `posts/` 폴더에 `.md` 파일 추가 — `posts/_template-note.md`(Note, Question→Conclusion 6단계) 또는 `posts/_template-method.md`(Method, 분석 방법)를 복사해서 사용. 맨 위 `type`이 `note`면 Note 섹션, `method`면 Method 섹션에 표시됩니다.
-2. `git push` — GitHub Actions가 `posts/index.json`을 자동 갱신합니다.
+1. `posts/note/` 또는 `posts/method/`의 `_template.md`를 복사해 `_` 없는 이름으로 저장 (예: `posts/method/fama-french-3.md`)
+2. 내용 작성 후 `git push` — GitHub Actions가 `posts/index.json`을 자동 갱신합니다.
+
+Method 글에서는 수식을 `$...$`(문장 속), `$$...$$`(별행)로 쓸 수 있습니다. 달러 금액은 `\$`로 씁니다.
 
 로컬에서 확인할 때는 `python tools/build_posts.py` 실행 후 `python -m http.server`로 여세요.

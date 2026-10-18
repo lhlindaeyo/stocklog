@@ -6,6 +6,8 @@
   <title>Investment Log</title>
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="stylesheet" href="assets/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
 </head>
@@ -34,7 +36,7 @@
   </footer>
   <script>
     const slug = new URLSearchParams(location.search).get('p') || '';
-    if (!/^[\w-]+$/.test(slug)) {
+    if (!/^(note|method)\/[\w-]+$/.test(slug)) {
       document.getElementById('title').textContent = '글을 찾을 수 없습니다.';
     } else {
       fetch('posts/' + slug + '.md').then(r => { if (!r.ok) throw 0; return r.text(); }).then(txt => {
@@ -42,11 +44,19 @@
         const meta = {};
         if (m) m[1].split(/\r?\n/).forEach(l => { const i = l.indexOf(':'); if (i > 0) meta[l.slice(0, i).trim()] = l.slice(i + 1).trim().replace(/^["']|["']$/g, ''); });
         const md = m ? m[2] : txt;
-        document.getElementById('back').href = 'list.html?type=' + (meta.type === 'method' ? 'method' : 'note');
+        document.getElementById('back').href = 'list.html?type=' + slug.split('/')[0];
         document.title = (meta.title || slug) + ' | Investment Log';
         document.getElementById('title').textContent = meta.title || slug;
         document.getElementById('meta').textContent = [meta.date && meta.date.replace(/-/g, '.'), meta.tag && meta.tag.toUpperCase()].filter(Boolean).join(' · ');
-        document.getElementById('body').innerHTML = DOMPurify.sanitize(marked.parse(md));
+        const maths = [];
+        const stash = (src, display) => '@@MATH' + (maths.push({ src, display }) - 1) + '@@';
+        const prepared = md
+          .replace(/\\\$/g, '@@DOLLAR@@')
+          .replace(/\$\$([\s\S]+?)\$\$/g, (_, s) => stash(s, true))
+          .replace(/\$([^\n$]+?)\$/g, (_, s) => stash(s, false));
+        document.getElementById('body').innerHTML = DOMPurify.sanitize(marked.parse(prepared))
+          .replace(/@@MATH(\d+)@@/g, (_, i) => katex.renderToString(maths[i].src, { displayMode: maths[i].display, throwOnError: false }))
+          .replace(/@@DOLLAR@@/g, () => '$');
       }).catch(() => { document.getElementById('title').textContent = '글을 찾을 수 없습니다.'; });
     }
   </script>
