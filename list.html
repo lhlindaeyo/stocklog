@@ -38,7 +38,7 @@
     document.getElementById('eyebrow').textContent = 'All ' + NAMES[type];
     document.getElementById('title').textContent = NAMES[type];
     document.querySelectorAll('.nav-links a').forEach(a => {
-      if (a.getAttribute('href') === 'list.html?type=' + type) a.style.color = 'var(--purple-light)';
+      if (a.getAttribute('href') === 'list.html?type=' + type) a.style.color = 'var(--accent)';
     });
     const params = new URLSearchParams(location.search);
     let current = params.get('k') || '';
