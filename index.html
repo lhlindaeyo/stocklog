@@ -3,911 +3,131 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QuantLens</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg: #ffffff;
-      --bg-sub: #f4f6fa;
-      --bg-card: #ffffff;
-      --border: #e4e8f0;
-      --text: #0a0a0a;
-      --text-sub: #6b7280;
-      --text-muted: #9ca3af;
-      --accent: #0057ff;
-      --accent-dim: rgba(0, 87, 255, 0.08);
-      --mono: 'JetBrains Mono', monospace;
-      --sans: 'Inter', sans-serif;
-      --radius: 6px;
-      --shadow: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
-    }
-
-    html, body {
-      font-family: var(--sans);
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      font-size: 14px;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* ── HEADER ── */
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: var(--bg);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 32px;
-      height: 52px;
-    }
-
-    .logo {
-      font-family: var(--mono);
-      font-size: 15px;
-      font-weight: 500;
-      letter-spacing: -0.02em;
-      color: var(--text);
-      text-decoration: none;
-    }
-
-    .logo span { color: var(--accent); }
-
-    nav {
-      display: flex;
-      align-items: stretch;
-      gap: 0;
-      height: 100%;
-    }
-
-    .tab-btn {
-      position: relative;
-      display: flex;
-      align-items: center;
-      padding: 0 18px;
-      font-size: 13px;
-      font-weight: 400;
-      color: var(--text-sub);
-      background: none;
-      border: none;
-      cursor: pointer;
-      letter-spacing: 0.01em;
-      transition: color 0.15s;
-      height: 100%;
-    }
-
-    .tab-btn::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 18px;
-      right: 18px;
-      height: 2px;
-      background: var(--accent);
-      transform: scaleX(0);
-      transition: transform 0.18s ease;
-      border-radius: 2px 2px 0 0;
-    }
-
-    .tab-btn:hover { color: var(--text); }
-
-    .tab-btn.active {
-      color: var(--accent);
-      font-weight: 500;
-    }
-
-    .tab-btn.active::after { transform: scaleX(1); }
-
-    .header-meta {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--text-muted);
-      letter-spacing: 0.04em;
-    }
-
-    /* ── MAIN ── */
-    main { max-width: 1100px; margin: 0 auto; padding: 40px 32px 80px; }
-
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
-
-    /* ── PAGE HEADERS ── */
-    .page-header { margin-bottom: 32px; }
-
-    .page-header h1 {
-      font-size: 22px;
-      font-weight: 600;
-      letter-spacing: -0.03em;
-      margin-bottom: 4px;
-    }
-
-    .page-header p {
-      font-size: 13px;
-      color: var(--text-sub);
-    }
-
-    /* ── MARKET TAB ── */
-    .market-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-bottom: 32px;
-    }
-
-    .market-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px 20px;
-      box-shadow: var(--shadow);
-    }
-
-    .market-card-label {
-      font-size: 11px;
-      color: var(--text-muted);
-      font-weight: 500;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-
-    .market-card-value {
-      font-family: var(--mono);
-      font-size: 22px;
-      font-weight: 500;
-      letter-spacing: -0.02em;
-      margin-bottom: 4px;
-    }
-
-    .market-card-change {
-      font-family: var(--mono);
-      font-size: 12px;
-      font-weight: 500;
-    }
-
-    .up { color: #16a34a; }
-    .down { color: #dc2626; }
-    .neutral { color: var(--text-muted); }
-
-    .market-section-title {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--text-sub);
-      margin: 28px 0 12px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .sector-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-    }
-
-    .sector-card {
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 12px 14px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .sector-card::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 3px;
-    }
-
-    .sector-card.up-card::before { background: #16a34a; }
-    .sector-card.down-card::before { background: #dc2626; }
-
-    .sector-name {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-
-    .sector-change {
-      font-family: var(--mono);
-      font-size: 13px;
-      font-weight: 500;
-    }
-
-    .data-notice {
-      margin-top: 20px;
-      padding: 10px 14px;
-      background: var(--bg-sub);
-      border-radius: var(--radius);
-      font-size: 11px;
-      color: var(--text-muted);
-      font-family: var(--mono);
-    }
-
-    /* ── CALENDAR TAB ── */
-    .calendar-list { display: flex; flex-direction: column; gap: 0; }
-
-    .cal-month-header {
-      font-family: var(--mono);
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      padding: 18px 0 8px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .cal-item {
-      display: grid;
-      grid-template-columns: 80px 1fr auto;
-      align-items: center;
-      padding: 13px 0;
-      border-bottom: 1px solid var(--border);
-      gap: 16px;
-    }
-
-    .cal-date {
-      font-family: var(--mono);
-      font-size: 12px;
-      color: var(--text-sub);
-    }
-
-    .cal-event-name {
-      font-size: 13px;
-      font-weight: 500;
-    }
-
-    .cal-event-sub {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    .impact-badge {
-      font-family: var(--mono);
-      font-size: 10px;
-      font-weight: 500;
-      padding: 2px 8px;
-      border-radius: 3px;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      flex-shrink: 0;
-    }
-
-    .impact-high { background: #fef2f2; color: #dc2626; }
-    .impact-med  { background: #fffbeb; color: #d97706; }
-    .impact-low  { background: var(--bg-sub); color: var(--text-muted); }
-
-    /* ── BACKTEST TAB ── */
-    .bt-summary-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 32px;
-    }
-
-    .bt-stat-card {
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px 20px;
-      box-shadow: var(--shadow);
-    }
-
-    .bt-stat-label {
-      font-size: 11px;
-      color: var(--text-muted);
-      font-weight: 500;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-
-    .bt-stat-value {
-      font-family: var(--mono);
-      font-size: 20px;
-      font-weight: 500;
-      letter-spacing: -0.02em;
-      margin-bottom: 3px;
-    }
-
-    .bt-stat-sub {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .bt-section-title {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--text-sub);
-      margin: 28px 0 12px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .bt-list { display: flex; flex-direction: column; gap: 0; }
-
-    .bt-item {
-      display: grid;
-      grid-template-columns: 1fr repeat(5, auto);
-      align-items: center;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--border);
-      gap: 24px;
-    }
-
-    .bt-item-header {
-      display: grid;
-      grid-template-columns: 1fr repeat(5, auto);
-      align-items: center;
-      padding: 8px 0;
-      gap: 24px;
-      border-bottom: 2px solid var(--border);
-    }
-
-    .bt-col-label {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      text-align: right;
-      white-space: nowrap;
-    }
-
-    .bt-col-label:first-child { text-align: left; }
-
-    .bt-strategy-name {
-      font-size: 13px;
-      font-weight: 500;
-    }
-
-    .bt-strategy-sub {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 2px;
-      font-family: var(--mono);
-    }
-
-    .bt-val {
-      font-family: var(--mono);
-      font-size: 13px;
-      font-weight: 500;
-      text-align: right;
-      white-space: nowrap;
-    }
-
-    .bt-status-badge {
-      font-family: var(--mono);
-      font-size: 10px;
-      font-weight: 500;
-      padding: 2px 8px;
-      border-radius: 3px;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-
-    .status-done  { background: #f0fdf4; color: #16a34a; }
-    .status-wip   { background: var(--accent-dim); color: var(--accent); }
-    .status-plan  { background: var(--bg-sub); color: var(--text-muted); }
-
-    .bt-equity-placeholder {
-      margin-top: 8px;
-      height: 160px;
-      border: 1px dashed var(--border);
-      border-radius: var(--radius);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 8px;
-      color: var(--text-muted);
-      font-size: 12px;
-    }
-
-    .bt-equity-placeholder .icon { font-size: 24px; opacity: 0.3; }
-
-    /* ── ARCHIVE TAB ── */
-    .archive-list { display: flex; flex-direction: column; gap: 1px; }
-
-    .archive-item {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: start;
-      padding: 20px 0;
-      border-bottom: 1px solid var(--border);
-      gap: 16px;
-      cursor: pointer;
-      transition: background 0.12s;
-    }
-
-    .archive-item:first-child { border-top: 1px solid var(--border); }
-    .archive-item:hover {
-      background: var(--bg-sub);
-      margin: 0 -12px;
-      padding-left: 12px;
-      padding-right: 12px;
-      border-radius: var(--radius);
-    }
-
-    .archive-item-title {
-      font-size: 15px;
-      font-weight: 500;
-      margin-bottom: 4px;
-      letter-spacing: -0.01em;
-    }
-
-    .archive-item-excerpt {
-      font-size: 12px;
-      color: var(--text-sub);
-      max-width: 600px;
-      line-height: 1.5;
-    }
-
-    .archive-item-meta { text-align: right; flex-shrink: 0; }
-
-    .archive-tag {
-      display: inline-block;
-      font-family: var(--mono);
-      font-size: 10px;
-      font-weight: 500;
-      padding: 2px 8px;
-      background: var(--accent-dim);
-      color: var(--accent);
-      border-radius: 3px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      margin-bottom: 6px;
-    }
-
-    .archive-date {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--text-muted);
-      display: block;
-    }
-
-    /* ── INDICATOR TAB ── */
-    .indicator-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
-
-    .indicator-card {
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px 24px;
-      box-shadow: var(--shadow);
-    }
-
-    .indicator-name {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: var(--text-sub);
-      margin-bottom: 6px;
-    }
-
-    .indicator-desc {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-bottom: 16px;
-      line-height: 1.5;
-    }
-
-    .indicator-coming {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--accent);
-      background: var(--accent-dim);
-      display: inline-block;
-      padding: 3px 9px;
-      border-radius: 3px;
-      letter-spacing: 0.04em;
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      header { padding: 0 16px; }
-      main { padding: 24px 16px 60px; }
-      .market-grid { grid-template-columns: repeat(2, 1fr); }
-      .sector-grid { grid-template-columns: repeat(2, 1fr); }
-      .indicator-grid { grid-template-columns: 1fr; }
-      .bt-summary-grid { grid-template-columns: repeat(2, 1fr); }
-      .bt-item, .bt-item-header { grid-template-columns: 1fr repeat(3, auto); }
-      .bt-item .bt-val:nth-child(4),
-      .bt-item .bt-val:nth-child(5),
-      .bt-item-header .bt-col-label:nth-child(4),
-      .bt-item-header .bt-col-label:nth-child(5) { display: none; }
-      nav .tab-btn { padding: 0 12px; font-size: 12px; }
-      .header-meta { display: none; }
-      .cal-item { grid-template-columns: 64px 1fr auto; }
-    }
-
-    @media (max-width: 480px) {
-      .market-grid { grid-template-columns: 1fr; }
-      .bt-summary-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-  </style>
+  <meta name="description" content="주식, 부동산, 거시경제를 데이터와 논리로 분석하는 개인 투자 리서치 랩." />
+  <title>Investment Log | Personal Research Journal</title>
+  <link rel="stylesheet" href="assets/style.css" />
 </head>
 <body>
-
-<header>
-  <a class="logo" href="#">Quant<span>Lens</span></a>
-  <nav id="nav">
-    <button class="tab-btn active" data-tab="market">Market</button>
-    <button class="tab-btn" data-tab="calendar">Calendar</button>
-    <button class="tab-btn" data-tab="backtest">Backtest</button>
-    <button class="tab-btn" data-tab="archive">Archive</button>
-    <button class="tab-btn" data-tab="indicator">Indicator</button>
-  </nav>
-  <span class="header-meta" id="live-date"></span>
-</header>
-
-<main>
-
-  <!-- ── MARKET ── -->
-  <section class="tab-panel active" id="tab-market">
-    <div class="page-header">
-      <h1>Market</h1>
-      <p>주요 지수 · 섹터 · 환율 — 데이터는 추후 yfinance / pykrx 연동 예정</p>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="#home" aria-label="Investment Log 홈">
+        <span class="brand-mark">I.</span><span>INVESTMENT LOG</span>
+      </a>
+      <nav class="nav-links" aria-label="주요 메뉴">
+        <a href="#research">Research</a>
+        <a href="#journal">Journal</a>
+        <a href="#method">Method</a>
+        <a href="#about">About</a>
+      </nav>
     </div>
+  </header>
 
-    <div class="market-section-title">주요 지수</div>
-    <div class="market-grid">
-      <div class="market-card">
-        <div class="market-card-label">KOSPI</div>
-        <div class="market-card-value">2,748.32</div>
-        <div class="market-card-change up">▲ +18.41 (+0.67%)</div>
-      </div>
-      <div class="market-card">
-        <div class="market-card-label">KOSDAQ</div>
-        <div class="market-card-value">847.19</div>
-        <div class="market-card-change down">▼ −4.52 (−0.53%)</div>
-      </div>
-      <div class="market-card">
-        <div class="market-card-label">S&amp;P 500</div>
-        <div class="market-card-value">5,421.03</div>
-        <div class="market-card-change up">▲ +32.17 (+0.60%)</div>
-      </div>
-      <div class="market-card">
-        <div class="market-card-label">NASDAQ</div>
-        <div class="market-card-value">17,382.94</div>
-        <div class="market-card-change up">▲ +91.44 (+0.53%)</div>
-      </div>
-      <div class="market-card">
-        <div class="market-card-label">DOW JONES</div>
-        <div class="market-card-value">39,112.76</div>
-        <div class="market-card-change down">▼ −45.20 (−0.12%)</div>
-      </div>
-      <div class="market-card">
-        <div class="market-card-label">USD / KRW</div>
-        <div class="market-card-value">1,374.50</div>
-        <div class="market-card-change down">▼ −3.20 (−0.23%)</div>
-      </div>
-    </div>
-
-    <div class="market-section-title">KOSPI 섹터별 등락 (당일)</div>
-    <div class="sector-grid">
-      <div class="sector-card up-card">
-        <div class="sector-name">반도체</div>
-        <div class="sector-change up">▲ +1.84%</div>
-      </div>
-      <div class="sector-card up-card">
-        <div class="sector-name">이차전지</div>
-        <div class="sector-change up">▲ +0.92%</div>
-      </div>
-      <div class="sector-card down-card">
-        <div class="sector-name">바이오</div>
-        <div class="sector-change down">▼ −0.61%</div>
-      </div>
-      <div class="sector-card up-card">
-        <div class="sector-name">금융</div>
-        <div class="sector-change up">▲ +0.45%</div>
-      </div>
-      <div class="sector-card down-card">
-        <div class="sector-name">자동차</div>
-        <div class="sector-change down">▼ −1.23%</div>
-      </div>
-      <div class="sector-card up-card">
-        <div class="sector-name">화학</div>
-        <div class="sector-change up">▲ +0.31%</div>
-      </div>
-      <div class="sector-card down-card">
-        <div class="sector-name">철강</div>
-        <div class="sector-change down">▼ −0.77%</div>
-      </div>
-      <div class="sector-card up-card">
-        <div class="sector-name">유틸리티</div>
-        <div class="sector-change up">▲ +0.18%</div>
-      </div>
-    </div>
-
-    <div class="data-notice">※ 현재 표시된 수치는 placeholder입니다. Python 연동 후 JSON으로 자동 업데이트 예정.</div>
-  </section>
-
-  <!-- ── CALENDAR ── -->
-  <section class="tab-panel" id="tab-calendar">
-    <div class="page-header">
-      <h1>Calendar</h1>
-      <p>주요 매크로 경제지표 발표 일정</p>
-    </div>
-    <div class="calendar-list">
-      <div class="cal-month-header">2025년 7월</div>
-      <div class="cal-item">
-        <div class="cal-date">07 / 02</div>
-        <div>
-          <div class="cal-event-name">미국 비농업 고용지수 (NFP)</div>
-          <div class="cal-event-sub">Bureau of Labor Statistics · 전월 대비 · 예상 180K</div>
-        </div>
-        <span class="impact-badge impact-high">High</span>
-      </div>
-      <div class="cal-item">
-        <div class="cal-date">07 / 10</div>
-        <div>
-          <div class="cal-event-name">미국 CPI (소비자물가지수)</div>
-          <div class="cal-event-sub">BLS · YoY · 예상 3.1%</div>
-        </div>
-        <span class="impact-badge impact-high">High</span>
-      </div>
-      <div class="cal-item">
-        <div class="cal-date">07 / 11</div>
-        <div>
-          <div class="cal-event-name">미국 PPI (생산자물가지수)</div>
-          <div class="cal-event-sub">BLS · YoY · 예상 2.4%</div>
-        </div>
-        <span class="impact-badge impact-med">Med</span>
-      </div>
-      <div class="cal-item">
-        <div class="cal-date">07 / 17</div>
-        <div>
-          <div class="cal-event-name">미국 소매판매</div>
-          <div class="cal-event-sub">Census Bureau · 전월 대비</div>
-        </div>
-        <span class="impact-badge impact-med">Med</span>
-      </div>
-      <div class="cal-item">
-        <div class="cal-date">07 / 26</div>
-        <div>
-          <div class="cal-event-name">FOMC 금리 결정</div>
-          <div class="cal-event-sub">Federal Reserve · 동결 전망 (CME FedWatch 기준 89%)</div>
-        </div>
-        <span class="impact-badge impact-high">High</span>
-      </div>
-      <div class="cal-item">
-        <div class="cal-date">07 / 31</div>
-        <div>
-          <div class="cal-event-name">한국 기준금리 결정</div>
-          <div class="cal-event-sub">한국은행 금통위</div>
-        </div>
-        <span class="impact-badge impact-high">High</span>
-      </div>
-
-      <div class="cal-month-header">2025년 8월</div>
-      <div class="cal-item">
-        <div class="cal-date">08 / 01</div>
-        <div>
-          <div class="cal-event-name">미국 ISM 제조업 PMI</div>
-          <div class="cal-event-sub">ISM · 예상 49.2 (기준선 50)</div>
-        </div>
-        <span class="impact-badge impact-med">Med</span>
-      </div>
-      <div class="cal-item">
-        <div class="cal-date">08 / 14</div>
-        <div>
-          <div class="cal-event-name">미국 CPI</div>
-          <div class="cal-event-sub">BLS · YoY</div>
-        </div>
-        <span class="impact-badge impact-high">High</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── BACKTEST ── -->
-  <section class="tab-panel" id="tab-backtest">
-    <div class="page-header">
-      <h1>Backtest</h1>
-      <p>전략별 백테스팅 결과 요약 — Backtrader + pyfolio-reloaded 기반, Python 로컬 실행 후 JSON 업로드</p>
-    </div>
-
-    <div class="bt-summary-grid">
-      <div class="bt-stat-card">
-        <div class="bt-stat-label">등록된 전략 수</div>
-        <div class="bt-stat-value">3</div>
-        <div class="bt-stat-sub">완료 1 · 진행 1 · 계획 1</div>
-      </div>
-      <div class="bt-stat-card">
-        <div class="bt-stat-label">최고 연평균수익률</div>
-        <div class="bt-stat-value up">+11.4%</div>
-        <div class="bt-stat-sub">KOSPI 모멘텀 12M/1M</div>
-      </div>
-      <div class="bt-stat-card">
-        <div class="bt-stat-label">최저 최대낙폭</div>
-        <div class="bt-stat-value down">−18.3%</div>
-        <div class="bt-stat-sub">KOSPI 모멘텀 12M/1M</div>
-      </div>
-      <div class="bt-stat-card">
-        <div class="bt-stat-label">분석 기간</div>
-        <div class="bt-stat-value">10Y</div>
-        <div class="bt-stat-sub">2015 – 2024</div>
-      </div>
-    </div>
-
-    <div class="bt-section-title">전략 목록</div>
-    <div class="bt-list">
-      <div class="bt-item-header">
-        <div class="bt-col-label">전략명</div>
-        <div class="bt-col-label">CAGR</div>
-        <div class="bt-col-label">MDD</div>
-        <div class="bt-col-label">Sharpe</div>
-        <div class="bt-col-label">Win Rate</div>
-        <div class="bt-col-label">상태</div>
-      </div>
-
-      <div class="bt-item">
-        <div>
-          <div class="bt-strategy-name">KOSPI 모멘텀 — 12M/1M</div>
-          <div class="bt-strategy-sub">KRX · 2015–2024 · 월리밸런싱 · 상위 20%</div>
-        </div>
-        <div class="bt-val up">+11.4%</div>
-        <div class="bt-val down">−18.3%</div>
-        <div class="bt-val">0.81</div>
-        <div class="bt-val">58.2%</div>
-        <span class="bt-status-badge status-done">Done</span>
-      </div>
-
-      <div class="bt-item">
-        <div>
-          <div class="bt-strategy-name">S&amp;P500 섹터 로테이션</div>
-          <div class="bt-strategy-sub">US · 2010–2024 · 분기리밸런싱 · 상위 3섹터</div>
-        </div>
-        <div class="bt-val neutral">—</div>
-        <div class="bt-val neutral">—</div>
-        <div class="bt-val neutral">—</div>
-        <div class="bt-val neutral">—</div>
-        <span class="bt-status-badge status-wip">In Progress</span>
-      </div>
-
-      <div class="bt-item">
-        <div>
-          <div class="bt-strategy-name">환율 연동 코스피 헤지 전략</div>
-          <div class="bt-strategy-sub">KRX · 설계 중 · USD/KRW 임계값 기반 포지션 조절</div>
-        </div>
-        <div class="bt-val neutral">—</div>
-        <div class="bt-val neutral">—</div>
-        <div class="bt-val neutral">—</div>
-        <div class="bt-val neutral">—</div>
-        <span class="bt-status-badge status-plan">Planned</span>
-      </div>
-    </div>
-
-    <div class="bt-section-title">KOSPI 모멘텀 — 누적 수익 곡선</div>
-    <div class="bt-equity-placeholder">
-      <span class="icon">📈</span>
-      <span>Equity Curve — Python 실행 후 차트 이미지 또는 JSON 데이터로 교체 예정</span>
-    </div>
-
-    <div class="data-notice">※ 성과 지표는 수수료 0.3% 편도 가정, 세금 미반영 수치입니다. 실제 투자 성과와 다를 수 있습니다.</div>
-  </section>
-
-  <!-- ── ARCHIVE ── -->
-  <section class="tab-panel" id="tab-archive">
-    <div class="page-header">
-      <h1>Archive</h1>
-      <p>리서치 노트 · 백테스팅 결과 · 팩터 분석 리포트</p>
-    </div>
-    <div class="archive-list">
-      <div class="archive-item">
-        <div>
-          <div class="archive-item-title">KOSPI 모멘텀 팩터 백테스팅 — 12M/1M 전략 검증</div>
-          <div class="archive-item-excerpt">12개월 수익률 기준 상위 20% 종목 선별 후 1개월 보유 전략의 성과를 2015–2024 구간에서 검증. 연평균 초과수익 +4.2%, 최대낙폭 -18.3%.</div>
-        </div>
-        <div class="archive-item-meta">
-          <span class="archive-tag">Backtest</span>
-          <span class="archive-date">2025-06-12</span>
+  <main>
+    <section class="hero" id="home">
+      <div class="container">
+        <div class="eyebrow">Personal Research Journal</div>
+        <h1>Understand Value.<br /><span>Invest with Evidence.</span></h1>
+        <p class="hero-copy">주식과 부동산, 거시경제를 데이터와 논리로 분석합니다. 투자 아이디어부터 가치평가, 리스크, 사후 회고까지 기록하는 개인 리서치 로그입니다.</p>
+        <div class="actions">
+          <a class="button primary" href="#research">분석 아카이브 보기 ↗</a>
+          <a class="button secondary" href="#about">사이트 소개</a>
         </div>
       </div>
-      <div class="archive-item">
-        <div>
-          <div class="archive-item-title">S&amp;P500 섹터 로테이션 — 매크로 국면별 수익률 분석</div>
-          <div class="archive-item-excerpt">NBER 경기 사이클을 기준으로 확장·수축·회복 국면별 섹터별 평균 수익률 집계 및 시사점 정리.</div>
+    </section>
+
+    <section id="research">
+      <div class="container">
+        <div class="section-heading">
+          <div><h2>Research Areas</h2><p>관심 자산과 분석 주제</p></div>
+          <a class="text-link" href="#journal">모든 분석 보기 ↗</a>
         </div>
-        <div class="archive-item-meta">
-          <span class="archive-tag">Research</span>
-          <span class="archive-date">2025-05-28</span>
+        <div class="grid">
+          <article class="card">
+            <div class="card-top"><span class="tag">EQUITY</span><span class="symbol">↗</span></div>
+            <h3>주식 · 기업 분석</h3>
+            <p>재무제표, 현금흐름, 경쟁우위, 성장성, 내재가치를 바탕으로 기업을 분석합니다.</p>
+          </article>
+          <article class="card">
+            <div class="card-top"><span class="tag">REAL ESTATE</span><span class="symbol">⌂</span></div>
+            <h3>부동산 분석</h3>
+            <p>금리, 공급, 입지, 임대수익, 가격 수준을 살펴보고 자산가치의 변화를 이해합니다.</p>
+          </article>
+          <article class="card">
+            <div class="card-top"><span class="tag">MACRO</span><span class="symbol">◌</span></div>
+            <h3>거시경제 · 시장</h3>
+            <p>금리, 환율, 유동성, 정책 변화가 자산 가격과 투자 판단에 미치는 영향을 정리합니다.</p>
+          </article>
         </div>
       </div>
-      <div class="archive-item">
-        <div>
-          <div class="archive-item-title">원달러 환율과 코스피 수익률 상관관계 분석</div>
-          <div class="archive-item-excerpt">2010–2024 월간 데이터 기반, 환율 변동이 외국인 순매수와 코스피 수익률에 미치는 지연 효과 추정.</div>
+    </section>
+
+    <section id="method">
+      <div class="container feature">
+        <div class="feature-intro">
+          <div class="eyebrow">Research Framework</div>
+          <h2>좋은 질문에서<br />투자 판단까지.</h2>
+          <p>모든 분석은 같은 구조로 작성해 아이디어를 검증하고, 나중에 판단이 맞았는지 돌아볼 수 있게 합니다.</p>
         </div>
-        <div class="archive-item-meta">
-          <span class="archive-tag">Alpha</span>
-          <span class="archive-date">2025-05-10</span>
+        <div class="steps">
+          <div class="step"><div class="step-number">01</div><div><h3>Question · 질문</h3><p>무엇을 설명하거나 예측하고 싶은가?</p></div></div>
+          <div class="step"><div class="step-number">02</div><div><h3>Thesis · 가설</h3><p>핵심 주장과 그 주장이 성립하는 조건은 무엇인가?</p></div></div>
+          <div class="step"><div class="step-number">03</div><div><h3>Evidence · 근거</h3><p>재무제표, 데이터, 논문, 공시가 가설을 뒷받침하는가?</p></div></div>
+          <div class="step"><div class="step-number">04</div><div><h3>Valuation · 가치평가</h3><p>적정 가치와 현재 가격 사이에 충분한 차이가 있는가?</p></div></div>
+          <div class="step"><div class="step-number">05</div><div><h3>Risks · 리스크</h3><p>어떤 전제가 틀리면 분석 결론이 바뀌는가?</p></div></div>
+          <div class="step"><div class="step-number">06</div><div><h3>Review · 회고</h3><p>결과를 확인하고 예측과 판단의 오류를 기록합니다.</p></div></div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ── INDICATOR ── -->
-  <section class="tab-panel" id="tab-indicator">
-    <div class="page-header">
-      <h1>Indicator</h1>
-      <p>커스텀 기술적 지표 — 백테스팅 환경과 연동 예정</p>
-    </div>
-    <div class="indicator-grid">
-      <div class="indicator-card">
-        <div class="indicator-name">MACD</div>
-        <div class="indicator-desc">이동평균 수렴·발산 지표. 단기(12일)·장기(26일) EMA 차이와 시그널(9일 EMA)을 기반으로 추세 전환을 포착.</div>
-        <span class="indicator-coming">Coming soon</span>
+    <section class="journal" id="journal">
+      <div class="container">
+        <div class="section-heading">
+          <div><h2>Latest Notes</h2><p>최근 분석과 투자 기록</p></div>
+          
+        </div>
+        <div class="journal-list" id="post-list"><p class="empty">불러오는 중…</p></div>
       </div>
-      <div class="indicator-card">
-        <div class="indicator-name">RSI</div>
-        <div class="indicator-desc">상대강도지수 (기본 14일). 과매수(70 이상) · 과매도(30 이하) 구간을 시각적으로 구분하여 반전 타이밍 식별.</div>
-        <span class="indicator-coming">Coming soon</span>
-      </div>
-      <div class="indicator-card">
-        <div class="indicator-name">Bollinger Bands</div>
-        <div class="indicator-desc">20일 이동평균 ± 2σ 밴드. 밴드 폭으로 변동성을 측정하고 가격의 상·하단 이탈 신호를 확인.</div>
-        <span class="indicator-coming">Coming soon</span>
-      </div>
-      <div class="indicator-card">
-        <div class="indicator-name">Moving Averages</div>
-        <div class="indicator-desc">MA20 / MA60 / MA120 골든크로스·데드크로스 감지 및 주가 대비 위치 분석. 중장기 추세 판단에 활용.</div>
-        <span class="indicator-coming">Coming soon</span>
-      </div>
-      <div class="indicator-card">
-        <div class="indicator-name">Volume Profile</div>
-        <div class="indicator-desc">가격대별 거래량 분포 분석. Point of Control(POC)과 Value Area를 기준으로 지지·저항 구간 도출.</div>
-        <span class="indicator-coming">Coming soon</span>
-      </div>
-      <div class="indicator-card">
-        <div class="indicator-name">Alpha Factors</div>
-        <div class="indicator-desc">모멘텀, 밸류, 퀄리티 팩터 기반 커스텀 알파 시그널. pykrx · yfinance 데이터를 활용한 팩터 스코어 산출.</div>
-        <span class="indicator-coming">Coming soon</span>
-      </div>
-    </div>
-  </section>
+    </section>
 
-</main>
+    <section id="about">
+      <div class="container">
+        <div class="about-box column">
+          <div>
+            <div class="eyebrow">About This Log</div>
+            <h2>기록하고, 검증하고, 개선하기.</h2>
+            <p>이 사이트는 투자 추천이나 수익 보장을 위한 공간이 아니라, 공개된 정보와 데이터에 근거해 자산을 공부하고 판단 과정을 축적하는 개인 연구 노트입니다. 분석의 기준일과 출처, 가정 및 리스크를 함께 기록합니다.</p>
+          </div>
+          <div class="interest-grid">
+            <div class="interest"><h3>퀀트 리서치</h3><p>직관이 아니라 데이터로 검증 가능한 투자 규칙을 찾는 일에 관심이 있습니다.</p></div>
+            <div class="interest"><h3>알파 팩터</h3><p>모멘텀 · 가치(PER, PBR) · 퀄리티(ROE, 부채비율) 팩터와 IC 분석.</p></div>
+            <div class="interest"><h3>백테스팅</h3><p>전략의 수익률, MDD, 샤프비율을 따져 과최적화 없이 검증하기.</p></div>
+            <div class="interest"><h3>기술적 지표</h3><p>MACD, RSI, 볼린저밴드, OBV 등 보조지표의 쓸모와 한계.</p></div>
+            <div class="interest"><h3>한국 · 미국 주식</h3><p>KRX와 US 시장을 함께 보며 지수와 개별 종목을 비교합니다.</p></div>
+            <div class="interest"><h3>거시경제</h3><p>금리, 환율 등 매크로 변수가 자산 가격에 미치는 영향.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 
-<script>
-  // 날짜 표시
-  const dateEl = document.getElementById('live-date');
-  const now = new Date();
-  dateEl.textContent = now.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' });
+  <footer>
+    <div class="container footer-inner"><span>© 2026 INVESTMENT LOG</span><span>Independent research · Not financial advice</span></div>
+  </footer>
 
-  // 탭 전환
-  const nav = document.getElementById('nav');
-  const panels = document.querySelectorAll('.tab-panel');
-  const buttons = document.querySelectorAll('.tab-btn');
-
-  nav.addEventListener('click', e => {
-    const btn = e.target.closest('.tab-btn');
-    if (!btn) return;
-    const target = btn.dataset.tab;
-    buttons.forEach(b => b.classList.remove('active'));
-    panels.forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('tab-' + target).classList.add('active');
-  });
-</script>
+  <script>
+    const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    fetch('posts/index.json').then(r => r.json()).then(posts => {
+      const el = document.getElementById('post-list');
+      if (!posts.length) { el.innerHTML = '<p class="empty">아직 글이 없습니다.</p>'; return; }
+      el.innerHTML = posts.map(p => `
+        <a class="journal-item" href="post.html?p=${encodeURIComponent(p.slug)}">
+          <time datetime="${esc(p.date)}">${esc(p.date.replace(/-/g, '.'))}${p.tag ? ' · ' + esc(p.tag.toUpperCase()) : ''}</time>
+          <div><h3>${esc(p.title)}</h3>${p.summary ? `<p>${esc(p.summary)}</p>` : ''}</div>
+          <span class="arrow">↗</span>
+        </a>`).join('');
+    }).catch(() => {
+      document.getElementById('post-list').innerHTML = '<p class="empty">글 목록을 불러오지 못했습니다. (로컬에서는 file:// 대신 서버로 여세요)</p>';
+    });
+  </script>
 </body>
 </html>
