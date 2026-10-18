@@ -16,6 +16,9 @@ def parse(path, type_):
             k, sep, v = line.partition(":")
             if sep:
                 meta[k.strip()] = v.strip().strip("\"'")
+    for need in ("title", "date"):
+        if need not in meta:
+            print(f"경고: {path.relative_to(POSTS.parent)} 에 {need} 가 없습니다")
     return {
         "slug": f"{type_}/{path.stem}",
         "title": meta.get("title", path.stem),
