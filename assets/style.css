@@ -130,3 +130,4 @@
     .post-meta, .chip, .kw span, footer { font-family: var(--font-label); }
     .nav-links { font-weight: 600; font-size: .95rem; }
     .eyebrow, .tag, .chip, .kw span { font-weight: 700; }
+    .journal-item h3, .post h1 { font-family: var(--font-label); font-weight: 700; }

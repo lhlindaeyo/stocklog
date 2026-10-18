@@ -1,0 +1,36 @@
+.world { position: relative; border-radius: 22px; overflow: hidden; border: 1px solid var(--line); background: #cfe0ec; }
+.world svg { display: block; width: 100%; height: auto; }
+.world-tip { position: absolute; z-index: 5; width: 270px; padding: 14px 16px; background: #fff; border: 1px solid var(--line); border-top: 4px solid var(--accent); border-radius: 12px; box-shadow: 0 10px 30px rgba(20,16,15,.18); pointer-events: none; }
+.world-tip[hidden] { display: none; }
+.world-tip b { font-family: var(--font-label); font-size: 1.05rem; }
+.world-tip p { margin: 6px 0 8px; font-size: .86rem; color: var(--ink); line-height: 1.55; }
+.world-tip small { font-family: var(--font-label); color: var(--accent); font-weight: 700; font-size: .75rem; }
+
+.world .island { animation: bob 7s ease-in-out infinite; }
+@keyframes bob { 50% { transform: translateY(-7px); } }
+.world .cloud { animation: drift 24s ease-in-out infinite alternate; }
+.world .c2 { animation-duration: 30s; }
+.world .c3 { animation-duration: 36s; }
+@keyframes drift { to { transform: translateX(40px); } }
+.world .fall { animation: fall 5s ease-in-out infinite alternate; }
+.world .d2 { animation-delay: -2s; }
+.world .d3 { animation-delay: -3.5s; }
+@keyframes fall { to { transform: translateY(14px); } }
+
+.world .char { cursor: pointer; outline: none; }
+.world .char-in { transition: transform .25s ease, filter .25s ease; }
+.world .char:hover .char-in, .world .char:focus .char-in { transform: translateY(-9px); filter: drop-shadow(0 8px 5px rgba(60,35,20,.28)); }
+.world .tag rect { fill: #fff; stroke: var(--line); }
+.world .tag text { font-family: var(--font-label); font-size: 13px; font-weight: 700; fill: var(--ink); }
+.world .char:hover .tag rect, .world .char:focus .tag rect { fill: var(--accent); stroke: var(--accent); }
+.world .char:hover .tag text, .world .char:focus .tag text { fill: #fff; }
+.world .smoke circle { fill: #fff; opacity: 0; animation: puff 3s ease-out infinite; }
+@keyframes puff { 0% { opacity: .85; transform: translateY(0) scale(.7); } 100% { opacity: 0; transform: translateY(-26px) scale(1.5); } }
+.world .smoke circle { transform-box: fill-box; transform-origin: center; }
+.world .bob { animation: coin 2.4s ease-in-out infinite; }
+@keyframes coin { 50% { transform: translateY(-5px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .world * { animation: none !important; }
+}
+@media (max-width: 600px) { .world-tip { width: 220px; } }
