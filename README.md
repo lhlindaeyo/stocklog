@@ -19,7 +19,15 @@ tools/build_posts.py               # index.json 생성 스크립트
 ## 글 올리기
 
 1. `posts/note/` 또는 `posts/method/`의 `_template.md`를 복사해 `_` 없는 이름으로 저장 (예: `posts/method/fama-french-3.md`)
-2. 내용 작성 후 `git push` — GitHub Actions가 `posts/index.json`을 자동 갱신합니다.
+2. 아래 세 줄을 실행합니다. 커밋할 때 `posts/index.json`이 자동으로 갱신되어 함께 올라가고, 1분쯤 뒤 사이트에 반영됩니다.
+
+```bash
+git add .
+git commit -m "add post"
+git push
+```
+
+새로 클론한 PC에서는 처음 한 번 `git config core.hooksPath tools/hooks`를 실행하세요. (이 설정이 없어도 GitHub Actions가 `posts/index.json`을 대신 갱신합니다.)
 
 Method 글에서는 수식을 `$...$`(문장 속), `$$...$$`(별행)로 쓸 수 있습니다. 달러 금액은 `\$`로 씁니다.
 
