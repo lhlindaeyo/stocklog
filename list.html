@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Investment Log</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="index.html#home" aria-label="Investment Log 홈">
+        <span class="brand-mark">I.</span><span>INVESTMENT LOG</span>
+      </a>
+      <nav class="nav-links" aria-label="주요 메뉴">
+        <a href="index.html#research">Research</a>
+        <a href="index.html#note">Note</a>
+        <a href="index.html#method">Method</a>
+        <a href="index.html#about">About</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container post">
+    <div class="eyebrow" id="eyebrow"></div>
+    <h1 id="title" style="font-size:clamp(2rem,5vw,3rem)"></h1>
+    <p class="hero-copy" id="desc" style="margin-bottom:28px"></p>
+    <div class="journal-list" id="list"><p class="empty">불러오는 중…</p></div>
+  </main>
+  <footer>
+    <div class="container footer-inner"><span>© 2026 INVESTMENT LOG</span><span>Independent research · Not financial advice</span></div>
+  </footer>
+  <script>
+    const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const INFO = {
+      note: ['Note', '종목·자산 분석 기록 — Question부터 Conclusion까지'],
+      method: ['Method', '여러 가지 분석 방법론 정리']
+    };
+    const type = new URLSearchParams(location.search).get('type') === 'method' ? 'method' : 'note';
+    document.title = INFO[type][0] + ' | Investment Log';
+    document.getElementById('eyebrow').textContent = 'All ' + INFO[type][0];
+    document.getElementById('title').textContent = INFO[type][0];
+    document.getElementById('desc').textContent = INFO[type][1];
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      if (a.getAttribute('href') === 'list.html?type=' + type) a.style.color = 'var(--purple-light)';
+    });
+    fetch('posts/index.json').then(r => r.json()).then(posts => {
+      const el = document.getElementById('list');
+      const items = posts.filter(p => (p.type || 'note') === type);
+      if (!items.length) { el.innerHTML = '<p class="empty">아직 글이 없습니다.</p>'; return; }
+      el.innerHTML = items.map(p => `
+        <a class="journal-item" href="post.html?p=${encodeURIComponent(p.slug)}">
+          <time datetime="${esc(p.date)}">${esc(p.date.replace(/-/g, '.'))}${p.tag ? ' · ' + esc(p.tag.toUpperCase()) : ''}</time>
+          <div><h3>${esc(p.title)}</h3>${p.summary ? `<p>${esc(p.summary)}</p>` : ''}</div>
+          <span class="arrow">↗</span>
+        </a>`).join('');
+    }).catch(() => {
+      document.getElementById('list').innerHTML = '<p class="empty">글 목록을 불러오지 못했습니다. (로컬에서는 file:// 대신 서버로 여세요)</p>';
+    });
+  </script>
+</body>
+</html>
