@@ -1,7 +1,8 @@
 ---
 title: AI 가속기 한 개를 뜯어보기: 부품별 공급망 지도
 date: 2026-10-19
-keywords: 반도체, HBM, 산업분석
+category: 산업분석
+keywords: 반도체, HBM
 summary: AI 가속기 하나에 들어가는 부품을 나눠서, 누가 만들고 왜 소수만 만들 수 있는지 정리한 지도.
 ---
 

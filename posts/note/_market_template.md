@@ -1,6 +1,7 @@
 ---
 title: 이벤트 이름: 한 줄 결론
 date: 2026-01-01
+category: 시장분석
 keywords: 매크로, 정책
 summary: 목록에 보일 한 줄 요약
 ---

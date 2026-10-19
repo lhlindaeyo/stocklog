@@ -28,6 +28,7 @@
   <main class="container post">
     <div class="eyebrow" id="eyebrow"></div>
     <h1 id="title" style="font-size:clamp(2rem,5vw,3rem)"></h1>
+    <div class="chips" id="chips-cat"></div>
     <div class="chips" id="chips"></div>
     <div class="journal-list" id="list"><p class="empty">불러오는 중…</p></div>
   </main>
@@ -45,37 +46,52 @@
       if (a.getAttribute('href') === 'list.html?type=' + type) a.style.color = 'var(--accent)';
     });
     const params = new URLSearchParams(location.search);
+    let cat = params.get('c') || '';
     let current = params.get('k') || '';
-    const setKeyword = k => {
-      current = k;
+    const sync = () => {
       const q = new URLSearchParams({ type });
-      if (k) q.set('k', k);
+      if (cat) q.set('c', cat);
+      if (current) q.set('k', current);
       history.pushState(null, '', '?' + q);
       draw();
     };
     let items = [];
-    function draw() {
-      const counts = {};
-      items.forEach(p => p.keywords.forEach(k => counts[k] = (counts[k] || 0) + 1));
-      const keys = Object.keys(counts).sort((a, b) => counts[b] - counts[a] || a.localeCompare(b, 'ko'));
-      const chips = document.getElementById('chips');
-      chips.innerHTML = keys.length
-        ? [['', '전체', items.length], ...keys.map(k => [k, k, counts[k]])]
-            .map(([k, label, n]) => `<button class="chip${k === current ? ' active' : ''}" data-k="${esc(k)}">${esc(label)}<small>${n}</small></button>`).join('')
+    const countBy = (list, pick) => {
+      const c = {};
+      list.forEach(p => pick(p).forEach(k => c[k] = (c[k] || 0) + 1));
+      return c;
+    };
+    const sortKeys = c => Object.keys(c).sort((a, b) => c[b] - c[a] || a.localeCompare(b, 'ko'));
+    const chipRow = (id, label, all, keys, counts, active, onPick) => {
+      const el = document.getElementById(id);
+      el.innerHTML = keys.length
+        ? `<span class="chip-label">${label}</span>` + [['', '전체', all], ...keys.map(k => [k, k, counts[k]])]
+            .map(([k, text, n]) => `<button class="chip${k === active ? ' active' : ''}" data-k="${esc(k)}">${esc(text)}<small>${n}</small></button>`).join('')
         : '';
-      chips.querySelectorAll('.chip').forEach(b => b.onclick = () => setKeyword(b.dataset.k));
+      el.querySelectorAll('.chip').forEach(b => b.onclick = () => onPick(b.dataset.k));
+    };
+    function draw() {
+      const inCat = cat ? items.filter(p => p.category === cat) : items;
+      const cats = countBy(items, p => p.category ? [p.category] : []);
+      chipRow('chips-cat', '분류', items.length, sortKeys(cats), cats, cat, k => { cat = k; current = ''; sync(); });
+      const kws = countBy(inCat, p => p.keywords);
+      if (current && !kws[current]) current = '';
+      chipRow('chips', '키워드', inCat.length, sortKeys(kws), kws, current, k => { current = k; sync(); });
       const el = document.getElementById('list');
-      const shown = current ? items.filter(p => p.keywords.includes(current)) : items;
+      const shown = current ? inCat.filter(p => p.keywords.includes(current)) : inCat;
       if (!shown.length) { el.innerHTML = '<p class="empty">아직 글이 없습니다.</p>'; return; }
       el.innerHTML = shown.map(p => `
         <a class="journal-item" href="post.html?p=${encodeURIComponent(p.slug)}">
           <time datetime="${esc(p.date)}">${esc(p.date.replace(/-/g, '.'))}</time>
           <div><h3>${esc(p.title)}</h3>${p.summary ? `<p>${esc(p.summary)}</p>` : ''}
-            ${p.keywords.length ? `<div class="kw">${p.keywords.map(k => `<span>${esc(k)}</span>`).join('')}</div>` : ''}</div>
+            ${(p.category || p.keywords.length) ? `<div class="kw">${p.category ? `<span class="cat">${esc(p.category)}</span>` : ''}${p.keywords.map(k => `<span>${esc(k)}</span>`).join('')}</div>` : ''}</div>
           <span class="arrow">↗</span>
         </a>`).join('');
     }
-    window.addEventListener('popstate', () => { current = new URLSearchParams(location.search).get('k') || ''; draw(); });
+    window.addEventListener('popstate', () => {
+      const q = new URLSearchParams(location.search);
+      cat = q.get('c') || ''; current = q.get('k') || ''; draw();
+    });
     fetch('posts/index.json').then(r => r.json()).then(posts => {
       items = posts.filter(p => (p.type || 'note') === type);
       draw();

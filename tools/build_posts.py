@@ -24,6 +24,7 @@ def parse(path, type_):
         "title": meta.get("title", path.stem),
         "date": meta.get("date", "1970-01-01"),
         "type": type_,
+        "category": meta.get("category", ""),
         "keywords": [k.strip() for k in meta.get("keywords", "").split(",") if k.strip()],
         "summary": meta.get("summary", ""),
     }

@@ -1,6 +1,7 @@
 ---
 title: 종목/주제 이름: 한 줄 결론
 date: 2026-01-01
+category: 종목분석
 keywords: 반도체, 가치평가
 summary: 목록에 보일 한 줄 요약
 ---

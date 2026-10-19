@@ -115,12 +115,14 @@
     .interest p { margin: 0; font-size: .88rem; }
     .about-box.column { flex-direction: column; align-items: stretch; }
     @media (max-width: 760px) { .interest-grid { grid-template-columns: 1fr; } }
-    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 28px; }
+    .chips { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 4px 0 14px; }
+    .chip-label { font-size: .72rem; font-weight: 700; color: var(--muted); letter-spacing: .06em; min-width: 44px; }
     .chip { padding: 6px 13px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--muted); font: inherit; font-size: .84rem; cursor: pointer; }
     .chip:hover { border-color: var(--accent); color: var(--accent); }
     .chip.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
     .chip small { opacity: .7; margin-left: 4px; }
     .kw { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .kw span.cat { background: var(--accent); color: #fff; }
     .kw span { padding: 2px 8px; border-radius: 6px; background: rgba(140,21,21,.08); color: var(--accent); font-size: .72rem; font-weight: 700; }
 
     /* 라벨·메타 정보용 글꼴 (본문·제목은 기본 글꼴 유지) */

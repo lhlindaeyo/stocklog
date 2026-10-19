@@ -4,21 +4,11 @@
     "title": "AI 가속기 한 개를 뜯어보기: 부품별 공급망 지도",
     "date": "2026-10-19",
     "type": "note",
+    "category": "산업분석",
     "keywords": [
       "반도체",
-      "HBM",
-      "산업분석"
+      "HBM"
     ],
     "summary": "AI 가속기 하나에 들어가는 부품을 나눠서, 누가 만들고 왜 소수만 만들 수 있는지 정리한 지도."
-  },
-  {
-    "slug": "note/welcome",
-    "title": "Investment Log를 시작합니다",
-    "date": "2026-10-18",
-    "type": "note",
-    "keywords": [
-      "가이드"
-    ],
-    "summary": "이 사이트에 글을 올리는 방법과 첫 기록."
   }
 ]

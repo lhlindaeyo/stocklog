@@ -1,6 +1,7 @@
 ---
 title: 산업 이름: 한 줄 결론
 date: 2026-01-01
+category: 산업분석
 keywords: 반도체, 산업구조
 summary: 목록에 보일 한 줄 요약
 ---
