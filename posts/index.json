@@ -1,5 +1,15 @@
 [
   {
+    "slug": "note/2026-10-19-gpu",
+    "title": "AI 가속기 한 개를 뜯어보기: 부품별 공급망 지도",
+    "date": "2026-10-19",
+    "type": "note",
+    "keywords": [
+      "산업분석"
+    ],
+    "summary": "목록에 보일 한 줄 요약"
+  },
+  {
     "slug": "note/welcome",
     "title": "Investment Log를 시작합니다",
     "date": "2026-10-18",

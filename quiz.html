@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz | Investment Log</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <link rel="stylesheet" href="assets/quiz.css" />
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="index.html#home" aria-label="Investment Log 홈">
+        <span class="brand-mark">I.</span><span>INVESTMENT LOG</span>
+      </a>
+      <nav class="nav-links" aria-label="주요 메뉴">
+        <a href="quiz.html" style="color:var(--accent)">Quiz</a>
+        <a href="index.html#research">Research</a>
+        <a href="list.html?type=note">Note</a>
+        <a href="list.html?type=method">Method</a>
+        <a href="simulation.html">Simulation</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container quiz">
+    <div class="eyebrow">Indicator Review</div>
+    <h1>지표 퀴즈</h1>
+    <p class="lead">재무제표 비율, 밸류에이션, 기술적·리스크 지표를 5지선다로 복습합니다. 기록은 저장되지 않습니다.</p>
+    <div class="chips" id="cats"></div>
+    <div id="stage"></div>
+  </main>
+  <footer>
+    <div class="container footer-inner"><span>© 2026 INVESTMENT LOG</span><span>Independent research · Not financial advice</span></div>
+  </footer>
+  <script src="assets/quiz-data.js"></script>
+  <script>
+    const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+    const ITEMS = window.QUIZ_ITEMS;
+    const CATS = [...new Set(ITEMS.map(i => i.c))];
+    let cat = '', deck = [], idx = 0, score = 0, answered = false;
+
+    function makeQuestion(it) {
+      const same = ITEMS.filter(x => x !== it && x.c === it.c);
+      const others = shuffle(same).concat(shuffle(ITEMS.filter(x => x.c !== it.c)));
+      const wrong = others.slice(0, 4);
+      const all = shuffle([it, ...wrong]);
+      if (Math.random() < 0.5) {
+        return { it, q: '다음 설명에 해당하는 지표는?\n' + it.d, opts: all.map(x => ({ t: x.n, ok: x === it })) };
+      }
+      return { it, q: '「' + it.n + '」의 계산식(정의)으로 옳은 것은?', opts: all.map(x => ({ t: x.f, ok: x === it })) };
+    }
+
+    function drawCats() {
+      const el = document.getElementById('cats');
+      const n = c => ITEMS.filter(i => !c || i.c === c).length;
+      el.innerHTML = [['', '전체'], ...CATS.map(c => [c, c])]
+        .map(([k, l]) => `<button class="chip${k === cat ? ' active' : ''}" data-k="${esc(k)}">${esc(l)}<small>${n(k)}</small></button>`).join('');
+      el.querySelectorAll('.chip').forEach(b => b.onclick = () => { cat = b.dataset.k; start(); });
+    }
+
+    function start() {
+      deck = shuffle(ITEMS.filter(i => !cat || i.c === cat)).map(makeQuestion);
+      idx = 0; score = 0; drawCats(); show();
+    }
+
+    function show() {
+      const stage = document.getElementById('stage');
+      if (idx >= deck.length) {
+        stage.innerHTML = `<div class="quiz-done"><div class="score">${score} / ${deck.length}</div><p class="lead">수고했어요! 다시 풀면 문제와 보기 순서가 새로 섞입니다.</p><button class="button primary quiz-next" id="again">다시 풀기</button></div>`;
+        document.getElementById('again').onclick = start; return;
+      }
+      answered = false;
+      const d = deck[idx];
+      stage.innerHTML = `
+        <div class="quiz-bar"><span>${idx + 1} / ${deck.length}</span><span>정답 ${score}</span></div>
+        <div class="quiz-progress"><i style="width:${idx / deck.length * 100}%"></i></div>
+        <span class="tag quiz-cat">${esc(d.it.c)}</span>
+        <p class="quiz-q">${esc(d.q).replace(/\n/g, '<br>')}</p>
+        <div class="quiz-opts">${d.opts.map((o, i) => `<button class="quiz-opt" data-i="${i}"><b>${i + 1}</b><span>${esc(o.t)}</span></button>`).join('')}</div>
+        <div id="after"></div>`;
+      stage.querySelectorAll('.quiz-opt').forEach(b => b.onclick = () => answer(+b.dataset.i));
+    }
+
+    function answer(i) {
+      if (answered) return; answered = true;
+      const d = deck[idx];
+      if (d.opts[i].ok) score++;
+      document.querySelectorAll('.quiz-opt').forEach((b, k) => {
+        b.disabled = true;
+        if (d.opts[k].ok) b.classList.add('correct'); else if (k === i) b.classList.add('wrong');
+      });
+      document.getElementById('after').innerHTML = `
+        <div class="quiz-exp"><strong>${esc(d.it.n)}</strong> = ${esc(d.it.f)}<p>${esc(d.it.d)}</p></div>
+        <button class="button primary quiz-next" id="next">${idx + 1 < deck.length ? '다음 문제 →' : '결과 보기'}</button>`;
+      document.getElementById('next').onclick = () => { idx++; show(); };
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key >= '1' && e.key <= '5') { if (!answered && deck[idx]) answer(+e.key - 1); }
+      else if (e.key === 'Enter' && answered) { const n = document.getElementById('next'); if (n) n.click(); }
+    });
+    start();
+  </script>
+</body>
+</html>
