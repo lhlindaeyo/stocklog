@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>용어 비교 | Investment Log</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <style>
+    .tv { max-width: 900px; padding: 64px 0 80px; --blue: #2b5fa8; --green: #2f7d4f; --gray: #6a6361; }
+    .tv h1 { font-size: clamp(2rem, 5vw, 3rem); margin: 8px 0 12px; }
+    .tv .hero-copy { margin: 0 0 28px; }
+    .tv-lead { color: #2b2625; margin: 0 0 20px; }
+    .tv-note { color: var(--muted); font-size: .82rem; margin: 18px 0 0; }
+    .tv-panel[hidden] { display: none; }
+    .tv-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 14px; }
+    .tv-stat { padding: 16px 18px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; }
+    .tv-stat small { display: block; color: var(--muted); font-size: .8rem; }
+    .tv-stat b { display: block; font-size: 2rem; line-height: 1.2; margin: 4px 0 2px; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+    .tv-stat span { color: var(--muted); font-size: .8rem; }
+    .tv-ctrl { padding: 16px 18px 12px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 14px; }
+    .tv-ctrl-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+    .tv-ctrl-top label { font-weight: 700; }
+    .tv-ctrl-top b { font-size: 1.2rem; font-variant-numeric: tabular-nums; }
+    .tv input[type=range] { width: 100%; accent-color: var(--accent); margin: 8px 0 2px; cursor: pointer; }
+    .tv-ticks { display: flex; justify-content: space-between; }
+    .tv-ticks button, .tv-ctrl-top .chip { font: inherit; }
+    .tv-ticks button { border: 0; background: none; color: var(--muted); font-size: .8rem; cursor: pointer; padding: 4px 2px; }
+    .tv-ticks button.on { color: var(--accent); font-weight: 800; }
+    .tv-charts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .tv-chart { padding: 16px 14px 10px; background: #fff; border: 1px solid var(--line); border-radius: 14px; }
+    .tv-chart h3 { margin: 0 0 10px; font-size: .95rem; }
+    .tv-bars { display: flex; gap: 6px; height: 190px; }
+    .tv-col { flex: 1; min-width: 0; display: grid; grid-template-rows: 1fr auto; border: 0; background: none; padding: 0; font: inherit; cursor: pointer; }
+    .tv-area { position: relative; }
+    .tv-fill { position: absolute; left: 12%; right: 12%; bottom: 0; background: #d9d2ce; border-radius: 6px 6px 0 0; transition: height .5s ease, background .25s; }
+    .tv-val { position: absolute; left: -6px; right: -6px; text-align: center; font-size: .74rem; font-weight: 800; opacity: 0; transition: opacity .2s, bottom .5s ease; font-variant-numeric: tabular-nums; }
+    .tv-x { font-size: .7rem; color: var(--muted); padding-top: 5px; }
+    .tv-col.on .tv-val { opacity: 1; }
+    .tv-col.on .tv-x { color: var(--ink); font-weight: 800; }
+    .tv-col:hover .tv-fill { filter: brightness(.95); }
+    .tv-col:focus-visible, .tv-pick:focus-visible, .tv-layer:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .tv .chips { margin: 0 0 20px; }
+    .tv-flow { display: flex; align-items: stretch; gap: 8px; margin-bottom: 10px; }
+    .tv-stage { flex: 1; text-align: center; padding: 16px 6px; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; color: var(--muted); transition: all .25s; }
+    .tv-stage b { display: block; font-size: 1rem; }
+    .tv-stage small { font-size: .75rem; }
+    .tv-stage.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .tv-stage.sup { border: 2px dashed var(--accent); color: var(--accent); background: rgba(140,21,21,.06); }
+    .tv-arrow { align-self: center; color: var(--accent); font-weight: 800; }
+    .tv-card { padding: 20px 22px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; margin-top: 14px; }
+    .tv-card h3 { margin: 0 0 8px; font-size: 1.15rem; }
+    .tv-card p { margin: 6px 0; color: #2b2625; }
+    .tv-card .lab { display: inline-block; min-width: 88px; color: var(--accent); font-weight: 800; font-size: .82rem; }
+    .tv-stack { display: flex; height: 64px; border-radius: 12px; overflow: hidden; margin: 18px 0 14px; }
+    .tv-seg { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; font-size: .8rem; min-width: 0; overflow: hidden; white-space: nowrap; transition: flex-basis .5s ease; }
+    .tv-seg b { font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+    .tv-delta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .tv-delta div { padding: 12px 14px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; }
+    .tv-delta small { display: block; color: var(--muted); font-size: .78rem; }
+    .tv-delta b { font-size: 1.1rem; }
+    .up { color: var(--green); } .down { color: var(--accent); } .flat { color: var(--muted); }
+    .tv-picks { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+    .tv-pick { text-align: left; padding: 14px 14px; font: inherit; background: #fff; border: 1.5px solid var(--line); border-radius: 12px; cursor: pointer; transition: all .2s; }
+    .tv-pick b { display: block; font-size: 1.05rem; }
+    .tv-pick small { color: var(--muted); font-size: .76rem; }
+    .tv-pick.on { border-color: var(--accent); background: rgba(140,21,21,.06); }
+    .tv-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--line); }
+    .tv-table th, .tv-table td { border: 1px solid var(--line); padding: 10px 12px; text-align: left; vertical-align: top; }
+    .tv-table th { background: var(--panel); width: 18%; font-size: .85rem; }
+    .tv-table thead th { color: var(--accent); width: auto; font-size: 1rem; }
+    .tv-layers { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 14px; }
+    .tv-layer { font: inherit; border: 1.5px solid var(--line); background: var(--panel-2); border-radius: 10px; padding: 12px 8px; cursor: pointer; transition: all .2s; }
+    .tv-layer.on { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
+    .tv-meter { display: flex; align-items: center; gap: 10px; margin: 8px 0; }
+    .tv-meter .lab { min-width: 40px; }
+    .tv-meter i { width: 26px; height: 10px; border-radius: 3px; background: #d9d2ce; }
+    .tv-meter i.f { background: var(--accent); }
+    @media (max-width: 760px) {
+      .tv-stats, .tv-charts, .tv-delta { grid-template-columns: 1fr; }
+      .tv-picks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .tv-flow { flex-wrap: wrap; } .tv-stage { flex-basis: 40%; } .tv-arrow { display: none; }
+      .tv-bars { height: 150px; }
+      .tv-table th { width: 26%; }
+    }
+    @media (prefers-reduced-motion: reduce) { .tv * { transition: none !important; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="index.html#home" aria-label="Investment Log 홈">
+        <span class="brand-mark">I.</span><span>INVESTMENT LOG</span>
+      </a>
+      <nav class="nav-links" aria-label="주요 메뉴">
+        <a href="quiz.html">Quiz</a>
+        <a href="index.html#research">Research</a>
+        <a href="list.html?type=note">Note</a>
+        <a href="list.html?type=method">Method</a>
+        <a href="simulation.html">Simulation</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container tv">
+    <div class="eyebrow">Interactive</div>
+    <h1>반도체 용어 비교</h1>
+    <p class="hero-copy">슬라이더를 움직이고 버튼을 눌러 보면서, 글에 나온 핵심 용어를 직접 비교해 보세요.</p>
+
+    <div class="chips" id="tabs" role="tablist" aria-label="비교 주제">
+      <button class="chip" role="tab" data-tab="nano">나노 공정</button>
+      <button class="chip" role="tab" data-tab="types">회사 유형</button>
+      <button class="chip" role="tab" data-tab="hbm">HBM 점유율</button>
+      <button class="chip" role="tab" data-tab="chips">AI 칩 종류</button>
+      <button class="chip" role="tab" data-tab="memory">GPU 저장 공간</button>
+    </div>
+
+    <!-- 1. 나노 공정 -->
+    <div class="tv-panel" id="p-nano" role="tabpanel">
+      <p class="tv-lead">공정이 미세해질수록(nm 숫자가 작아질수록) 같은 면적에 트랜지스터를 더 많이 넣을 수 있습니다. 슬라이더를 움직여 보세요.</p>
+      <div class="tv-stats">
+        <div class="tv-stat"><small>트랜지스터 집적도</small><b id="sDens"></b><span id="nDens"></span></div>
+        <div class="tv-stat"><small>전력 소모량</small><b id="sPow"></b><span id="nPow"></span></div>
+        <div class="tv-stat"><small>처리 속도 (성능)</small><b id="sPerf"></b><span id="nPerf"></span></div>
+      </div>
+      <div class="tv-ctrl">
+        <div class="tv-ctrl-top">
+          <label for="nanoRange">공정 미세화 (nm)</label>
+          <span><button class="chip" id="nanoPlay" type="button">▶ 재생</button> <b id="nanoVal"></b></span>
+        </div>
+        <input type="range" id="nanoRange" min="0" max="5" step="1" value="0" />
+        <div class="tv-ticks" id="nanoTicks"></div>
+      </div>
+      <div class="tv-charts">
+        <div class="tv-chart"><h3>집적도 (배)</h3><div class="tv-bars" id="bDens"></div></div>
+        <div class="tv-chart"><h3>전력 소모 (%)</h3><div class="tv-bars" id="bPow"></div></div>
+        <div class="tv-chart"><h3>성능 (%)</h3><div class="tv-bars" id="bPerf"></div></div>
+      </div>
+      <p class="tv-note">※ 28nm를 기준(100%)으로 둔, 개념 이해용 단순화 예시값입니다. 실제 수치는 회사와 공정마다 다르고, 요즘 공정 이름의 nm는 실제 회로 길이와 다를 수 있습니다.</p>
+    </div>
+
+    <!-- 2. 회사 유형 -->
+    <div class="tv-panel" id="p-types" role="tabpanel" hidden>
+      <p class="tv-lead">반도체 산업은 설계 → 생산 → 조립·테스트 → 판매 순서로 이어집니다. 회사 유형을 눌러서 어느 단계를 맡는지 확인해 보세요.</p>
+      <div class="chips" id="typeChips"></div>
+      <div class="tv-flow" id="flow"></div>
+      <div class="tv-card" id="typeCard"></div>
+    </div>
+
+    <!-- 3. HBM 점유율 -->
+    <div class="tv-panel" id="p-hbm" role="tabpanel" hidden>
+      <p class="tv-lead">HBM 시장은 세 회사가 거의 다 나눠 가집니다. 분기를 바꿔 보면서 점유율이 어떻게 움직였는지 보세요.</p>
+      <div class="tv-ctrl">
+        <div class="tv-ctrl-top"><label for="hbmRange">분기</label><b id="hbmVal"></b></div>
+        <input type="range" id="hbmRange" min="0" max="4" step="1" value="4" />
+        <div class="tv-ticks" id="hbmTicks"></div>
+      </div>
+      <div class="tv-stack" id="hbmStack" aria-live="polite"></div>
+      <div class="tv-delta" id="hbmDelta"></div>
+      <p class="tv-note" id="hbmGap"></p>
+    </div>
+
+    <!-- 4. AI 칩 -->
+    <div class="tv-panel" id="p-chips" role="tabpanel" hidden>
+      <p class="tv-lead">AI 반도체는 크게 네 종류입니다. 두 개를 골라 나란히 비교해 보세요. (최대 2개)</p>
+      <div class="tv-picks" id="picks"></div>
+      <table class="tv-table" id="cmp"></table>
+    </div>
+
+    <!-- 5. GPU 저장 공간 -->
+    <div class="tv-panel" id="p-memory" role="tabpanel" hidden>
+      <p class="tv-lead">GPU 안에는 데이터를 두는 곳이 여러 층으로 있습니다. 층을 눌러서 특징을 확인해 보세요.</p>
+      <div class="tv-layers" id="layers"></div>
+      <div class="tv-card" id="layerCard"></div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-inner"><span>© 2026 INVESTMENT LOG</span><span>Independent research · Not financial advice</span></div>
+  </footer>
+
+  <script>
+  (function () {
+    const $ = (id) => document.getElementById(id);
+    const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ---------- 탭 ---------- */
+    const TABS = ['nano', 'types', 'hbm', 'chips', 'memory'];
+    function showTab(name) {
+      if (!TABS.includes(name)) name = 'nano';
+      TABS.forEach((t) => { $('p-' + t).hidden = t !== name; });
+      document.querySelectorAll('#tabs .chip').forEach((b) => {
+        const on = b.dataset.tab === name;
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-selected', on);
+      });
+      if (name !== 'nano') stopPlay();
+      try { history.replaceState(null, '', '#' + name); } catch (e) {}
+    }
+    document.querySelectorAll('#tabs .chip').forEach((b) => b.addEventListener('click', () => showTab(b.dataset.tab)));
+
+    /* ---------- 1. 나노 공정 ---------- */
+    const NODES = [28, 14, 7, 5, 3, 2];
+    const DENS = [1, 2, 4, 7, 12, 20];
+    const POW = [100, 60, 33, 24, 15, 9];
+    const PERF = [100, 125, 155, 175, 205, 235];
+    const SERIES = [
+      { id: 'bDens', data: DENS, color: 'var(--blue)', fmt: (v) => v + 'x' },
+      { id: 'bPow', data: POW, color: 'var(--green)', fmt: (v) => v + '%' },
+      { id: 'bPerf', data: PERF, color: 'var(--accent)', fmt: (v) => v + '%' },
+    ];
+    let nodeIdx = 0, timer = null;
+    const range = $('nanoRange');
+
+    SERIES.forEach((s) => {
+      const max = Math.max.apply(null, s.data);
+      $(s.id).innerHTML = s.data.map((v, i) => {
+        const h = (v / max) * 86;
+        return '<button type="button" class="tv-col" data-i="' + i + '" aria-label="' + NODES[i] + 'nm ' + s.fmt(v) + '">' +
+          '<span class="tv-area"><span class="tv-fill" style="height:' + h + '%"></span>' +
+          '<span class="tv-val" style="bottom:calc(' + h + '% + 3px);color:' + s.color + '">' + s.fmt(v) + '</span></span>' +
+          '<span class="tv-x">' + NODES[i] + 'nm</span></button>';
+      }).join('');
+      $(s.id).addEventListener('click', (e) => { const c = e.target.closest('.tv-col'); if (c) { stopPlay(); setNode(+c.dataset.i); } });
+    });
+    $('nanoTicks').innerHTML = NODES.map((n, i) => '<button type="button" data-i="' + i + '">' + n + 'nm</button>').join('');
+    $('nanoTicks').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { stopPlay(); setNode(+b.dataset.i); } });
+
+    function setNode(i) {
+      nodeIdx = i; range.value = i;
+      $('nanoVal').textContent = NODES[i] + ' nm';
+      $('sDens').textContent = DENS[i] + 'x';
+      $('sPow').textContent = POW[i] + '%';
+      $('sPerf').textContent = PERF[i] + '%';
+      $('sDens').style.color = 'var(--blue)'; $('sPow').style.color = 'var(--green)'; $('sPerf').style.color = 'var(--accent)';
+      $('nDens').textContent = i === 0 ? '기준 (1배)' : '28nm 대비 ' + DENS[i] + '배';
+      $('nPow').textContent = i === 0 ? '기준 (100%)' : '28nm 대비 ' + (100 - POW[i]) + '% 줄어듦';
+      $('nPerf').textContent = i === 0 ? '기준 (100%)' : '28nm 대비 ' + (PERF[i] - 100) + '% 빨라짐';
+      SERIES.forEach((s) => {
+        $(s.id).querySelectorAll('.tv-col').forEach((c, k) => {
+          const on = k === i; c.classList.toggle('on', on);
+          c.querySelector('.tv-fill').style.background = on ? s.color : '';
+        });
+      });
+      $('nanoTicks').querySelectorAll('button').forEach((b, k) => b.classList.toggle('on', k === i));
+    }
+    range.addEventListener('input', () => { stopPlay(); setNode(+range.value); });
+    function stopPlay() { if (timer) { clearInterval(timer); timer = null; } $('nanoPlay').textContent = '▶ 재생'; }
+    $('nanoPlay').addEventListener('click', () => {
+      if (timer) { stopPlay(); return; }
+      if (nodeIdx >= NODES.length - 1) setNode(0);
+      $('nanoPlay').textContent = '⏸ 멈춤';
+      timer = setInterval(() => { if (nodeIdx >= NODES.length - 1) stopPlay(); else setNode(nodeIdx + 1); }, reduce ? 1400 : 1000);
+    });
+    setNode(0);
+
+    /* ---------- 2. 회사 유형 ---------- */
+    const STAGES = [['설계', 'Design'], ['생산', 'Fab'], ['조립·테스트', 'Package'], ['판매', 'Sales']];
+    const TYPES = [
+      { k: '팹리스', on: [1, 0, 0, 1], sup: false, name: '팹리스 (Fabless)', what: '칩 설계만 하고, 생산은 다른 회사에 맡깁니다.', ex: '엔비디아, 퀄컴, AMD, 애플', like: '레시피를 개발해서 파는 사람' },
+      { k: '파운드리', on: [0, 1, 0, 0], sup: false, name: '파운드리 (Foundry)', what: '설계도를 받아 대신 생산만 합니다.', ex: 'TSMC, 삼성 파운드리, SMIC', like: '남의 레시피로 대신 요리해 주는 대형 주방' },
+      { k: 'IDM', on: [1, 1, 1, 1], sup: false, name: 'IDM (종합반도체)', what: '설계, 생산, 판매 전 과정을 한 회사가 모두 합니다.', ex: '삼성전자, SK하이닉스, 인텔', like: '레시피 개발부터 요리와 판매까지 다 하는 식당' },
+      { k: 'OSAT', on: [0, 0, 1, 0], sup: false, name: 'OSAT (후공정 전문)', what: '다 만든 칩을 포장(패키징)하고 테스트합니다.', ex: 'ASE, 앰코', like: '완성된 요리를 포장하고 맛을 확인하는 곳' },
+      { k: '소부장', on: [0, 0, 0, 0], sup: true, name: '소부장 (소재·부품·장비)', what: '생산과 조립 단계에서 쓰는 소재, 부품, 장비를 공급합니다.', ex: 'ASML, 램리서치, 도쿄일렉트론', like: '주방에 칼, 재료, 오븐을 파는 회사' },
+    ];
+    $('typeChips').innerHTML = TYPES.map((t, i) => '<button type="button" class="chip" data-i="' + i + '">' + t.k + '</button>').join('');
+    $('flow').innerHTML = STAGES.map((s, i) =>
+      (i ? '<span class="tv-arrow">→</span>' : '') + '<div class="tv-stage" data-s="' + i + '"><b>' + s[0] + '</b><small>' + s[1] + '</small></div>').join('');
+    function setType(i) {
+      const t = TYPES[i];
+      document.querySelectorAll('#typeChips .chip').forEach((b, k) => b.classList.toggle('active', k === i));
+      document.querySelectorAll('.tv-stage').forEach((el) => {
+        const s = +el.dataset.s;
+        el.classList.toggle('on', !!t.on[s]);
+        el.classList.toggle('sup', t.sup && (s === 1 || s === 2));
+      });
+      $('typeCard').innerHTML = '<h3>' + t.name + '</h3><p><span class="lab">하는 일</span>' + t.what + '</p><p><span class="lab">대표 기업</span>' + t.ex + '</p><p><span class="lab">쉽게 말하면</span>' + t.like + '</p>' +
+        (t.sup ? '<p class="tv-note">점선 표시는 직접 만들지 않고 "공급"하는 단계입니다.</p>' : '');
+    }
+    $('typeChips').addEventListener('click', (e) => { const b = e.target.closest('.chip'); if (b) setType(+b.dataset.i); });
+    setType(0);
+
+    /* ---------- 3. HBM 점유율 ---------- */
+    const QS = ['25년 2Q', '25년 3Q', '25년 4Q', '26년 1Q', '26년 2Q'];
+    const HBM = [
+      { n: 'SK하이닉스', v: [64, 56, 57, 58, 50], c: 'var(--accent)' },
+      { n: '삼성전자', v: [15, 23, 22, 21, 33], c: 'var(--blue)' },
+      { n: '마이크론', v: [21, 21, 21, 21, 18], c: 'var(--gray)' },
+    ];
+    const hr = $('hbmRange');
+    $('hbmTicks').innerHTML = QS.map((q) => '<button type="button">' + q + '</button>').join('');
+    $('hbmStack').innerHTML = HBM.map((h) => '<div class="tv-seg" style="background:' + h.c + '"></div>').join('');
+    $('hbmTicks').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) setQ([].indexOf.call($('hbmTicks').children, b)); });
+    function setQ(i) {
+      hr.value = i; $('hbmVal').textContent = QS[i];
+      const sum = HBM.reduce((a, h) => a + h.v[i], 0);
+      $('hbmStack').querySelectorAll('.tv-seg').forEach((el, k) => {
+        el.style.flexBasis = (HBM[k].v[i] / sum * 100) + '%';
+        el.innerHTML = '<b>' + HBM[k].v[i] + '%</b>' + (HBM[k].v[i] >= 17 ? '<span>' + HBM[k].n + '</span>' : '');
+      });
+      $('hbmDelta').innerHTML = HBM.map((h) => {
+        let d = '';
+        if (i > 0) { const x = h.v[i] - h.v[i - 1]; d = '<b class="' + (x > 0 ? 'up' : x < 0 ? 'down' : 'flat') + '">' + (x > 0 ? '▲ +' : x < 0 ? '▼ ' : '– ') + x + '%p</b> 전 분기 대비'; }
+        else d = '<span class="flat">첫 분기 (비교 대상 없음)</span>';
+        return '<div><small style="color:' + h.c + ';font-weight:800">' + h.n + '</small>' + d + '</div>';
+      }).join('');
+      $('hbmGap').textContent = 'SK하이닉스와 삼성전자의 격차: ' + (HBM[0].v[i] - HBM[1].v[i]) + '%p' + (sum !== 100 ? ' · 반올림 때문에 합이 ' + sum + '%입니다.' : '');
+      $('hbmTicks').querySelectorAll('button').forEach((b, k) => b.classList.toggle('on', k === i));
+    }
+    hr.addEventListener('input', () => setQ(+hr.value));
+    setQ(4);
+
+    /* ---------- 4. AI 칩 비교 ---------- */
+    const CHIPS = [
+      { n: 'GPU', t: '범용 병렬 계산', s: '그래픽용에서 출발한, 계산을 동시에 많이 하는 칩', p: '쓰임새가 넓고, CUDA 같은 소프트웨어 생태계가 있음', c: '비싸고 전력을 많이 씀', e: '엔비디아 블랙웰·루빈, AMD 인스팅트' },
+      { n: 'NPU', t: 'AI 계산 전용', s: '인공신경망 계산 전용 칩', p: '전력 대비 성능이 좋음', c: 'GPU보다 쓰임새가 좁음', e: '리벨리온 아톰, 퓨리오사AI 레니게이드' },
+      { n: 'ASIC', t: '주문형 맞춤 칩', s: '특정 용도에 맞춘 주문형 칩', p: '목표 작업에서 효율이 최고, 많이 만들면 단가가 내려감', c: '개발 기간과 비용이 크고, 만든 뒤 고치기 어려움', e: '구글 TPU' },
+      { n: 'FPGA', t: '다시 설계 가능', s: '만든 뒤에도 회로를 다시 프로그래밍할 수 있는 칩', p: '설계가 유연하고 지연이 짧음', c: '개당 단가가 높아 대량 생산에 불리', e: 'AMD(자일링스) 계열 FPGA' },
+    ];
+    let picked = [0, 2];
+    $('picks').innerHTML = CHIPS.map((c, i) => '<button type="button" class="tv-pick" data-i="' + i + '"><b>' + c.n + '</b><small>' + c.t + '</small></button>').join('');
+    function renderChips() {
+      document.querySelectorAll('.tv-pick').forEach((b, i) => b.classList.toggle('on', picked.includes(i)));
+      const cols = picked.slice().sort((a, b) => a - b).map((i) => CHIPS[i]);
+      const row = (label, key) => '<tr><th>' + label + '</th>' + cols.map((c) => '<td>' + c[key] + '</td>').join('') + '</tr>';
+      $('cmp').innerHTML = '<thead><tr><th></th>' + cols.map((c) => '<th>' + c.n + '</th>').join('') + '</tr></thead><tbody>' +
+        row('특징', 's') + row('장점', 'p') + row('단점', 'c') + row('대표 제품', 'e') + '</tbody>';
+    }
+    $('picks').addEventListener('click', (e) => {
+      const b = e.target.closest('.tv-pick'); if (!b) return;
+      const i = +b.dataset.i;
+      if (picked.includes(i)) { if (picked.length > 1) picked = picked.filter((x) => x !== i); }
+      else { picked.push(i); if (picked.length > 2) picked.shift(); }
+      renderChips();
+    });
+    renderChips();
+
+    /* ---------- 5. GPU 저장 공간 ---------- */
+    const LAYERS = [
+      { n: '레지스터 (Register)', w: 46, speed: 4, cap: 1, d: '가장 빠른 저장소입니다. GPU 코어가 계산할 때 바로 가져다 씁니다.' },
+      { n: 'L1 캐시', w: 62, speed: 3, cap: 2, d: '코어 가까이(SM 안쪽)에 있는 빠른 임시 저장소입니다. RAM의 데이터를 미리 복사해 둡니다.' },
+      { n: 'L2 캐시', w: 78, speed: 2, cap: 3, d: 'SM 바깥에 있는 임시 저장소입니다. L1보다 크고 느립니다.' },
+      { n: 'GPU DRAM (AI 가속기에서는 HBM)', w: 100, speed: 1, cap: 4, d: '프로그램을 실행할 때 쓰는 큰 저장소입니다. 가장 크지만 가장 느려서, 데이터를 빠르게 대 주는 HBM의 성능이 중요해집니다.' },
+    ];
+    $('layers').innerHTML = LAYERS.map((l, i) => '<button type="button" class="tv-layer" data-i="' + i + '" style="width:' + l.w + '%">' + l.n + '</button>').join('');
+    function meter(n) { let s = ''; for (let k = 1; k <= 4; k++) s += '<i class="' + (k <= n ? 'f' : '') + '"></i>'; return s; }
+    function setLayer(i) {
+      const l = LAYERS[i];
+      document.querySelectorAll('.tv-layer').forEach((b, k) => b.classList.toggle('on', k === i));
+      $('layerCard').innerHTML = '<h3>' + l.n + '</h3><p>' + l.d + '</p>' +
+        '<div class="tv-meter"><span class="lab">속도</span>' + meter(l.speed) + '</div>' +
+        '<div class="tv-meter"><span class="lab">용량</span>' + meter(l.cap) + '</div>' +
+        '<p class="tv-note">칸 수는 층끼리의 순서를 보여 주는 값입니다. 실제 수치가 아닙니다. 용량과 속도는 반대로 움직입니다.</p>';
+    }
+    $('layers').addEventListener('click', (e) => { const b = e.target.closest('.tv-layer'); if (b) setLayer(+b.dataset.i); });
+    setLayer(3);
+
+    showTab(location.hash.replace('#', ''));
+    window.addEventListener('hashchange', () => showTab(location.hash.replace('#', '')));
+  })();
+  </script>
+</body>
+</html>
