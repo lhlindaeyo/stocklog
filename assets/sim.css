@@ -47,6 +47,7 @@ input[type=range] { accent-color: var(--accent); }
 .controls { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 
 #graph { width: 100%; height: auto; display: block; border-radius: 12px; overflow: hidden; }
+#graph .smoke circle { fill: #d6cfc7; } /* 흰 배경에서도 연기가 보이게 */
 .edge { fill: none; stroke: #b9b0ac; stroke-linecap: round; }
 .edge.on { stroke: var(--accent); stroke-dasharray: 7 6; animation: flow 1s linear infinite; }
 @keyframes flow { to { stroke-dashoffset: -26; } }

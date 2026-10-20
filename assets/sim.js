@@ -124,64 +124,12 @@
   const svg = $('graph');
   const nodeEls = {}, edgeEls = [];
 
-  const HORIZON = 96; // 하늘과 땅의 경계 y
-
-  // 화면 아래를 채우는 로우폴리 대리석 바닥 + 먼 언덕
-  function ground() {
-    const { poly, P } = window.Chars;
-    const hills = poly([[0, HORIZON], [0, 70], [70, 58], [150, 74], [230, 62], [300, HORIZON]], '#c9cfa0') +
-      poly([[260, HORIZON], [360, 66], [440, 78], [520, 56], [640, 72], [640, HORIZON]], '#bfc795');
-    // 고정 시드 난수: 새로고침해도 같은 무늬
-    let seed = 7;
-    const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
-    const light = ['#f7f3ec', '#f1ece4', '#eee8de', '#f4efe8'];   // 흰 대리석
-    const dark = ['#dfd7ca', '#d9d0c3', '#dcd4c7', '#d5ccbe'];    // 회색 대리석
-    const s = 64, ox = 320, oy = 300; // 타일 크기, 화면 중심
-    const pt = (x, y) => { const p = P(x, y, 0); return [p[0] + ox, p[1] + oy]; };
-    let tiles = '', veins = '', grout = '';
-    for (let i = -9; i < 9; i++) {
-      for (let j = -9; j < 9; j++) {
-        const a = pt(i * s, j * s), b = pt((i + 1) * s, j * s), c = pt((i + 1) * s, (j + 1) * s), d = pt(i * s, (j + 1) * s);
-        if (Math.max(a[1], b[1], c[1], d[1]) < HORIZON || a[1] > 640 || b[0] < 0 || d[0] > 640) continue;
-        // 타일 안쪽 한 점을 살짝 비틀어 네 면으로 쪼갠다(로우폴리 면 느낌)
-        const m = pt((i + 0.35 + rnd() * 0.3) * s, (j + 0.35 + rnd() * 0.3) * s);
-        const tone = (i + j) % 2 ? dark : light;
-        const k = Math.floor(rnd() * 4);
-        tiles += poly([a, b, m], tone[k]) + poly([b, c, m], tone[(k + 1) % 4]) +
-          poly([c, d, m], tone[(k + 2) % 4]) + poly([d, a, m], tone[(k + 3) % 4]);
-        grout += poly([a, b, c, d], 'none');
-        if (rnd() < 0.35) { // 대리석 결
-          const u = rnd(), v = rnd();
-          const v1 = pt((i + u * 0.3) * s, (j + 0.1) * s), v2 = pt((i + 0.4 + v * 0.2) * s, (j + 0.5) * s), v3 = pt((i + 0.9) * s, (j + 0.6 + u * 0.3) * s);
-          veins += `<polyline points="${[v1, v2, v3].map(p => p.join(',')).join(' ')}"/>`;
-        }
-      }
-    }
-    return hills +
-      `<g clip-path="url(#groundClip)">${tiles}` +
-      `<g fill="none" stroke="#b9ad9c" stroke-width="1.1" stroke-linejoin="round" opacity=".45">${veins}</g>` +
-      `<g stroke="#c2b6a4" stroke-width="1.2" stroke-linejoin="round">${grout}</g>` +
-      `<rect x="0" y="${HORIZON}" width="640" height="${640 - HORIZON}" fill="url(#simGround)"/></g>` +
-      `<line x1="0" y1="${HORIZON}" x2="640" y2="${HORIZON}" stroke="#cfc5b6" stroke-width="2"/>`;
-  }
-
   function buildGraph() {
     const defs = el('defs', {}, svg);
-    const sky = el('linearGradient', { id: 'simSky', x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
-    el('stop', { offset: 0, 'stop-color': '#bcd4e6' }, sky);
-    el('stop', { offset: 1, 'stop-color': '#eaf1f5' }, sky);
-    // 바닥 위에 얹는 원근감: 먼 쪽은 하늘빛으로 흐리게
-    const haze = el('linearGradient', { id: 'simGround', x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
-    el('stop', { offset: 0, 'stop-color': '#eaf1f5', 'stop-opacity': 0.7 }, haze);
-    el('stop', { offset: 0.35, 'stop-color': '#eaf1f5', 'stop-opacity': 0 }, haze);
-    const clip = el('clipPath', { id: 'groundClip' }, defs);
-    el('rect', { x: 0, y: HORIZON, width: 640, height: 640 - HORIZON }, clip);
     const mk = el('marker', { id: 'arrow', viewBox: '0 0 10 10', refX: 9, refY: 5, markerWidth: 7, markerHeight: 7, orient: 'auto-start-reverse' }, defs);
     el('path', { d: 'M0 0L10 5L0 10z', fill: '#8a807d' }, mk);
 
-    el('rect', { width: 640, height: 640, rx: 12, fill: 'url(#simSky)' }, svg);
-    const land = el('g', { class: 'ground' }, svg);
-    land.innerHTML = ground();
+    el('rect', { width: 640, height: 640, fill: '#fff' }, svg);
 
     M.edges.forEach(e => {
       const a = nodeById[e.from], b = nodeById[e.to];
