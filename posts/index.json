@@ -1,5 +1,17 @@
 [
   {
+    "slug": "note/2026-10-20-ai-circular-investment",
+    "title": "AI 인프라의 돈 순환: 돈이 어떻게 흘러가는가",
+    "date": "2026-10-20",
+    "type": "note",
+    "category": "산업분석",
+    "keywords": [
+      "AI인프라",
+      "순환투자"
+    ],
+    "summary": "엔비디아·은행·데이터센터 기업·임차인 사이에서 대출, 지분, 보증, 임대로 돈이 오가는 길을 한 장의 지도로 정리했다."
+  },
+  {
     "slug": "note/2026-10-19-ai-gpu-supply-chain",
     "title": "AI 가속기 한 개를 뜯어보기: 부품별 공급망 지도",
     "date": "2026-10-19",

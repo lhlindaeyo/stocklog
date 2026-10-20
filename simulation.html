@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="assets/style.css" />
   <link rel="stylesheet" href="assets/world.css" />
   <link rel="stylesheet" href="assets/sim.css" />
+  <link rel="stylesheet" href="assets/game.css" />
 </head>
 <body>
   <header>
@@ -30,8 +31,19 @@
   <main class="container sim">
     <div class="eyebrow">Systemic Risk Game</div>
     <h1>Simulation</h1>
+    <div class="mode-tabs" role="tablist" aria-label="시뮬레이션 모드">
+      <button class="mode-tab" role="tab" id="tab-game" data-mode="game" aria-controls="gameMode">Game Mode</button>
+      <button class="mode-tab" role="tab" id="tab-research" data-mode="research" aria-controls="researchMode">Research Mode</button>
+    </div>
+
+    <section id="gameMode" role="tabpanel" aria-labelledby="tab-game">
+      <p class="hero-copy">은행·투자자·국가·기업 중 한 주체가 되어 거시경제 충격을 맞아 보세요. 세 번의 선택이 끝나면 엔딩을 봅니다. 결과는 저장되지 않으며, 서로의 입장과 딜레마를 이해하기 위한 가벼운 게임입니다.</p>
+      <div id="game"></div>
+    </section>
+
+    <section id="researchMode" role="tabpanel" aria-labelledby="tab-research" hidden>
     <p class="hero-copy">기업·은행·투자자·국가를 하나의 연결된 시스템으로 보고, 외부 충격이 경제 전체로 어떻게 번지는지 턴제로 확인합니다. 정책 포인트로 개입해 시스템을 붕괴에서 지켜보세요.</p>
-    <div class="sim-notice">샘플 모델 — 현재 수식은 화면 확인용 임시 값입니다 (assets/sim-model.js)</div>
+    <div class="sim-notice">샘플 모델 — 현재 수식은 화면 확인용 임시 값입니다 (assets/sim-model.js) · 선행연구 기반 업데이트 예정</div>
 
     <div class="hud">
       <div class="cell"><small>Turn</small><b id="turn">0</b><div class="progress"><i id="progress"></i></div></div>
@@ -86,6 +98,7 @@
         </section>
       </div>
     </div>
+    </section>
   </main>
   <footer>
     <div class="container footer-inner"><span>© 2026 INVESTMENT LOG</span><span>Independent research · Not financial advice</span></div>
@@ -102,5 +115,7 @@
   <script src="assets/chars.js"></script>
   <script src="assets/sim-model.js"></script>
   <script src="assets/sim.js"></script>
+  <script src="assets/game-data.js"></script>
+  <script src="assets/game.js"></script>
 </body>
 </html>
