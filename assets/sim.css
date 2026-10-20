@@ -46,7 +46,7 @@ input[type=range] { accent-color: var(--accent); }
 .btn.wide { width: 100%; margin-top: 12px; }
 .controls { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 
-#graph { width: 100%; height: auto; display: block; }
+#graph { width: 100%; height: auto; display: block; border-radius: 12px; overflow: hidden; }
 .edge { fill: none; stroke: #b9b0ac; stroke-linecap: round; }
 .edge.on { stroke: var(--accent); stroke-dasharray: 7 6; animation: flow 1s linear infinite; }
 @keyframes flow { to { stroke-dashoffset: -26; } }
