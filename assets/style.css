@@ -126,7 +126,8 @@
 
     /* 라벨·메타 정보용 글꼴 (본문·제목은 기본 글꼴 유지) */
     :root { --font-label: "Source Sans 3", Inter, Pretendard, -apple-system, "Segoe UI", sans-serif; }
-    .brand { color: var(--accent); font-family: var(--font-label); font-weight: 800; letter-spacing: .02em; font-size: 1.05rem; }
+    .brand { color: var(--accent); font-family: "Righteous", var(--font-label); font-weight: 400; letter-spacing: .02em; font-size: 1.3rem; white-space: nowrap; }
+    @media (max-width: 420px) { .brand { font-size: .95rem; } .nav { gap: 12px; } }
     .nav-links, .eyebrow, .button, .text-link, .tag, .step-number, .journal-item time,
     .post-meta, .chip, .kw span, footer { font-family: var(--font-label); }
     .nav-links { font-weight: 600; font-size: .95rem; }
