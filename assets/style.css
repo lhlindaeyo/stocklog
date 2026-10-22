@@ -76,7 +76,7 @@
     @media (max-width: 760px) {
       .nav { min-height: 64px; }
       .nav-links { gap: 13px; font-size: .8rem; }
-      .hero { height: calc(100svh - 64px); min-height: 360px; }
+      .hero { height: calc(100svh - 64px); min-height: 360px; background-position: 78% center; }
       section { padding: 58px 0; }
       .grid { grid-template-columns: 1fr; }
       .card { min-height: auto; }
