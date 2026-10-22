@@ -1,5 +1,41 @@
 [
   {
+    "slug": "note/2026-10-22-portfolio_policy",
+    "title": "주식 매수/매도 원칙",
+    "date": "2026-10-22",
+    "type": "note",
+    "category": "포트폴리오",
+    "keywords": [
+      "기본원칙"
+    ],
+    "summary": "개인 주식 매수, 매도 및 리밸런싱 원칙"
+  },
+  {
+    "slug": "note/2026-10-22-real-estate-basics",
+    "title": "부동산 기초: 전세사기 체크리스트와 시장 지표, 대출 규제",
+    "date": "2026-10-22",
+    "type": "note",
+    "category": "부동산",
+    "keywords": [
+      "전세",
+      "부동산지표",
+      "대출규제"
+    ],
+    "summary": "전세 계약 전 확인할 다섯 가지, 시장 흐름을 읽는 지표, LTV·DTI·DSR의 차이를 한 장에 정리했다."
+  },
+  {
+    "slug": "note/2026-10-22-Q3-portfolio",
+    "title": "포트폴리오 설정",
+    "date": "2026-10-22",
+    "type": "note",
+    "category": "포트폴리오",
+    "keywords": [
+      "2026",
+      "Q3"
+    ],
+    "summary": "2026 3분기 포트폴리오"
+  },
+  {
     "slug": "note/2026-10-22-financial-indicators",
     "title": "금융지표 20개로 시장의 온도 재기",
     "date": "2026-10-22",
@@ -23,42 +59,6 @@
       "체크리스트"
     ],
     "summary": "『최소한의 경제공부』를 읽고 반도체부터 필수소비재까지 산업마다 종목을 고를 때 확인할 질문을 정리했다."
-  },
-  {
-    "slug": "note/2026-10-22-portfolio_policy",
-    "title": "주식 매수/매도 원칙",
-    "date": "2026-10-22",
-    "type": "note",
-    "category": "포트폴리오",
-    "keywords": [
-      "기본원칙"
-    ],
-    "summary": "개인 주식 매수, 매도 및 리밸런싱 원칙"
-  },
-  {
-    "slug": "note/2026-10-22-Q3-portfolio",
-    "title": "포트폴리오 설정",
-    "date": "2026-10-22",
-    "type": "note",
-    "category": "포트폴리오",
-    "keywords": [
-      "2026",
-      "Q3"
-    ],
-    "summary": "2026 3분기 포트폴리오"
-  },
-  {
-    "slug": "note/2026-10-22-real-estate-basics",
-    "title": "부동산 기초: 전세사기 체크리스트와 시장 지표, 대출 규제",
-    "date": "2026-10-22",
-    "type": "note",
-    "category": "부동산",
-    "keywords": [
-      "전세",
-      "부동산지표",
-      "대출규제"
-    ],
-    "summary": "전세 계약 전 확인할 다섯 가지, 시장 흐름을 읽는 지표, LTV·DTI·DSR의 차이를 한 장에 정리했다."
   },
   {
     "slug": "note/2026-10-20-ai-circular-investment",
