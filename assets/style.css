@@ -29,7 +29,10 @@
     .brand { display: flex; align-items: center; gap: 11px; font-weight: 800; letter-spacing: .08em; font-size: .95rem; }
     .nav-links { display: flex; align-items: center; gap: 27px; color: var(--muted); font-size: .9rem; }
     .nav-links a:hover { color: var(--accent); }
-    .hero { padding: 105px 0 88px; border-bottom: 1px solid var(--line); background: radial-gradient(ellipse at 80% 10%, rgba(140,21,21,.07), transparent 38%); }
+    .hero { position: relative; overflow: hidden; display: flex; align-items: center; min-height: 460px; padding: 88px 0; border-bottom: 1px solid var(--line); text-align: center; }
+    .hero::before { content: ""; position: absolute; inset: 0; background: url("hero.jpg") center / cover no-repeat; opacity: .28; }
+    .hero .container { position: relative; }
+    .hero h1 { margin: 0 auto; }
     .eyebrow { color: var(--accent); text-transform: uppercase; font-size: .76rem; letter-spacing: .18em; font-weight: 700; }
     h1 { max-width: 850px; margin: 20px 0; font-size: clamp(2.7rem, 7vw, 5.4rem); line-height: 1.05; letter-spacing: -.055em; }
     h1 span { color: var(--accent); }
@@ -75,7 +78,7 @@
     @media (max-width: 760px) {
       .nav { min-height: 64px; }
       .nav-links { gap: 13px; font-size: .8rem; }
-      .hero { padding: 75px 0 65px; }
+      .hero { min-height: 340px; padding: 64px 0; }
       section { padding: 58px 0; }
       .grid { grid-template-columns: 1fr; }
       .card { min-height: auto; }
