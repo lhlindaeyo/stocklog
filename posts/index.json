@@ -6,12 +6,21 @@
     "type": "note",
     "category": "포트폴리오",
     "keywords": [
-      "기본원칙",
-      "매수",
-      "매도",
-      "리밸런싱"
+      "기본원칙"
     ],
     "summary": "개인 주식 매수, 매도 및 리밸런싱 원칙"
+  },
+  {
+    "slug": "note/2026-10-22-Q3-portfolio",
+    "title": "포트폴리오 설정",
+    "date": "2026-10-22",
+    "type": "note",
+    "category": "포트폴리오",
+    "keywords": [
+      "2026",
+      "Q3"
+    ],
+    "summary": "2026 3분기 포트폴리오"
   },
   {
     "slug": "note/2026-10-20-ai-circular-investment",
