@@ -70,6 +70,14 @@ body.sim-page > header { flex: none; }
 .sw-gate { position: absolute; inset: 0; z-index: 20; display: grid; place-items: center; padding: 24px; background: rgba(20,16,15,.55); backdrop-filter: blur(8px); }
 .sw-gate[hidden] { display: none; }
 .sw-gate-box { max-width: 440px; padding: 34px 32px 28px; text-align: center; background: #fff; border-radius: 20px; border-top: 6px solid var(--accent); box-shadow: 0 24px 60px rgba(0,0,0,.3); }
+/* 전체화면이 되면 안내가 스르르 사라진다 (첫 그리기 뒤에만 전환 효과) */
+.sw-gate.ready, .sw-gate.ready .sw-gate-box { transition: opacity .5s ease, visibility .5s, transform .5s ease; }
+.sw-gate.off { opacity: 0; visibility: hidden; pointer-events: none; }
+.sw-gate.off .sw-gate-box { transform: translateY(-14px) scale(.96); }
+.sw-gate-key { margin: 0 0 6px; }
+.sw-gate-key[hidden] { display: none; }
+.sw-gate kbd { display: inline-block; min-width: 72px; padding: 10px 16px; border: 1px solid var(--line); border-bottom-width: 4px; border-radius: 12px; background: var(--panel); font-family: var(--font-label); font-weight: 800; font-size: 1.15rem; color: var(--ink); animation: sw-press 1.8s ease-in-out infinite; }
+@keyframes sw-press { 50% { transform: translateY(2px); border-bottom-width: 2px; margin-bottom: 2px; } }
 .sw-gate-icon { font-size: 2.4rem; line-height: 1; color: var(--accent); }
 .sw-gate h2 { margin: 12px 0 8px; font-family: var(--font-label); font-size: 1.45rem; }
 .sw-gate p { margin: 0 0 18px; color: var(--muted); }
