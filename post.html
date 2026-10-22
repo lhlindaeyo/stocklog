@@ -48,7 +48,7 @@
         const meta = {};
         if (m) m[1].split(/\r?\n/).forEach(l => { const i = l.indexOf(':'); if (i > 0) meta[l.slice(0, i).trim()] = l.slice(i + 1).trim().replace(/^["']|["']$/g, ''); });
         const md = m ? m[2] : txt;
-        document.getElementById('back').href = 'list.html?type=' + slug.split('/')[0];
+        document.getElementById('back').href = 'list.html?type=' + slug.split('/')[0] + (meta.category ? '&c=' + encodeURIComponent(meta.category) : '');
         document.title = (meta.title || slug) + ' | Investment Log';
         document.getElementById('title').textContent = meta.title || slug;
         document.getElementById('meta').textContent = [meta.date && meta.date.replace(/-/g, '.'), slug.split('/')[0].toUpperCase()].filter(Boolean).join(' · ');

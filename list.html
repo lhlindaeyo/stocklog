@@ -62,18 +62,21 @@
       return c;
     };
     const sortKeys = c => Object.keys(c).sort((a, b) => c[b] - c[a] || a.localeCompare(b, 'ko'));
+    // all 이 null 이면 '전체' 칩 없이 그린다.
     const chipRow = (id, label, all, keys, counts, active, onPick) => {
       const el = document.getElementById(id);
       el.innerHTML = keys.length
-        ? `<span class="chip-label">${label}</span>` + [['', '전체', all], ...keys.map(k => [k, k, counts[k]])]
+        ? `<span class="chip-label">${label}</span>` + [...(all === null ? [] : [['', '전체', all]]), ...keys.map(k => [k, k, counts[k]])]
             .map(([k, text, n]) => `<button class="chip${k === active ? ' active' : ''}" data-k="${esc(k)}">${esc(text)}<small>${n}</small></button>`).join('')
         : '';
       el.querySelectorAll('.chip').forEach(b => b.onclick = () => onPick(b.dataset.k));
     };
     function draw() {
-      const inCat = cat ? items.filter(p => p.category === cat) : items;
       const cats = countBy(items, p => p.category ? [p.category] : []);
-      chipRow('chips-cat', '분류', items.length, sortKeys(cats), cats, cat, k => { cat = k; current = ''; sync(); });
+      const catKeys = sortKeys(cats);
+      if (!cats[cat]) cat = catKeys[0] || '';
+      const inCat = cat ? items.filter(p => p.category === cat) : items;
+      chipRow('chips-cat', '분류', null, catKeys, cats, cat, k => { cat = k; current = ''; sync(); });
       const kws = countBy(inCat, p => p.keywords);
       if (current && !kws[current]) current = '';
       chipRow('chips', '키워드', inCat.length, sortKeys(kws), kws, current, k => { current = k; sync(); });
