@@ -6,16 +6,13 @@
 .world-tip p { margin: 6px 0 8px; font-size: .86rem; color: var(--ink); line-height: 1.55; }
 .world-tip small { font-family: var(--font-label); color: var(--accent); font-weight: 700; font-size: .75rem; }
 
-.world .island { animation: bob 7s ease-in-out infinite; }
-@keyframes bob { 50% { transform: translateY(-7px); } }
 .world .cloud { animation: drift 24s ease-in-out infinite alternate; }
 .world .c2 { animation-duration: 30s; }
-.world .c3 { animation-duration: 36s; }
 @keyframes drift { to { transform: translateX(40px); } }
-.world .fall { animation: fall 5s ease-in-out infinite alternate; }
-.world .d2 { animation-delay: -2s; }
-.world .d3 { animation-delay: -3.5s; }
-@keyframes fall { to { transform: translateY(14px); } }
+.world .wave { animation: wave 4s ease-in-out infinite alternate; }
+.world .w2 { animation-delay: -1.5s; }
+.world .w3 { animation-delay: -3s; }
+@keyframes wave { to { transform: translateX(14px); opacity: .4; } }
 
 .world .char { cursor: pointer; outline: none; }
 .world .char-in { transition: transform .25s ease, filter .25s ease; }

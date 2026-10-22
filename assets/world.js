@@ -1,4 +1,4 @@
-/* 홈 하단 "The System" 장면 — 로우폴리 떠 있는 섬 위의 기업·은행·투자자·국가 캐릭터 */
+/* 홈 하단 "Economy Simulator" 장면 — 바다 위 로우폴리 섬 위의 기업·은행·투자자·국가 캐릭터 */
 (function () {
   const stage = document.getElementById('world-stage');
   if (!stage) return;
@@ -33,18 +33,14 @@
   ring.forEach((p, i) => island += poly([O, p, ring[(i + 1) % 8]], topTones[i % 4]));
   const rimTones = ['#d2a56a', '#c18f55', '#b58049', '#c99a5f'];
   const rimTop = [A, H, G, F, E], rimBot = [[70, 299], [200, 369], [400, 402], [600, 369], [730, 299]];
-  let under = '', rim = '';
-  const lo = [[140, 400], [240, 440], [400, 470], [560, 440], [660, 400]], apex = [410, 548];
-  const brown = ['#8a4b37', '#74392a', '#9a5740', '#6a3326', '#80402f', '#a05d44'];
-  for (let i = 0; i < 4; i++) {
-    const p = rimBot[i], q = rimBot[i + 1], r = lo[i + 1], s = lo[i];
-    under += poly([p, q, s], brown[(i * 2) % 6]) + poly([q, r, s], brown[(i * 2 + 1) % 6]) + poly([s, r, apex], brown[(i + 3) % 6]);
-    rim += poly([rimTop[i], rimTop[i + 1], rimBot[i + 1], rimBot[i]], rimTones[i]);
-  }
+  let rim = '';
+  for (let i = 0; i < 4; i++) rim += poly([rimTop[i], rimTop[i + 1], rimBot[i + 1], rimBot[i]], rimTones[i]);
   const grass = '<polygon points="100,265 150,235 215,222 255,245 215,285 135,292" fill="#9bc462"/><polygon points="150,235 215,222 255,245 190,262" fill="#aed16f"/><polygon points="100,265 135,292 215,285 190,262" fill="#86b052"/>';
-  const rocksFalling = `<g class="fall"><polygon points="560,452 580,446 588,462 570,470" fill="#7c4030"/></g>
-      <g class="fall d2"><polygon points="250,470 262,462 272,474 258,482" fill="#74392a"/></g>
-      <g class="fall d3"><polygon points="640,480 650,474 656,484 646,488" fill="#8a4b37"/></g>`;
+  const sea = `<rect y="210" width="800" height="370" fill="url(#sea)"/>
+      <ellipse cx="400" cy="292" rx="390" ry="128" fill="#bfe6ec"/>
+      <ellipse cx="400" cy="300" rx="352" ry="112" fill="none" stroke="#fff" stroke-width="3" opacity=".8"/>`;
+  const wave = (x, y, c = '') => `<g class="wave ${c}"><path d="M${x} ${y} q10 -6 20 0 t20 0" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" opacity=".75"/></g>`;
+  const waves = wave(60, 445) + wave(620, 452, 'w2') + wave(320, 462, 'w3') + wave(730, 415) + wave(170, 420, 'w2');
 
   const place = (cls, key, x, y, inner, sc = 1.15) => `<g class="char ${cls}" data-k="${key}" tabindex="0" role="img" aria-label="${INFO[key].name}" transform="translate(${x} ${y}) scale(${sc})">
       <rect class="hit" x="-70" y="-120" width="140" height="160" fill="transparent"/>
@@ -52,14 +48,14 @@
       <g class="tag" transform="translate(0 40)"><rect x="-28" y="-12" width="56" height="22" rx="11" /><text y="4" text-anchor="middle">${INFO[key].name}</text></g></g>`;
 
   stage.querySelector('svg').innerHTML = `
-    <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bcd4e6"/><stop offset="1" stop-color="#eaf1f5"/></linearGradient></defs>
-    <rect width="800" height="580" fill="url(#sky)"/>
+    <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bcd4e6"/><stop offset="1" stop-color="#eaf1f5"/></linearGradient>
+      <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fd0e0"/><stop offset="1" stop-color="#5ea7c4"/></linearGradient></defs>
+    <rect width="800" height="480" fill="url(#sky)"/>
     <g class="cloud c1"><ellipse cx="120" cy="90" rx="46" ry="14" fill="#fff" opacity=".85"/><ellipse cx="150" cy="80" rx="30" ry="12" fill="#fff" opacity=".85"/></g>
     <g class="cloud c2"><ellipse cx="660" cy="120" rx="54" ry="15" fill="#fff" opacity=".8"/><ellipse cx="630" cy="110" rx="28" ry="11" fill="#fff" opacity=".8"/></g>
-    <g class="cloud c3"><ellipse cx="720" cy="470" rx="40" ry="12" fill="#fff" opacity=".7"/></g>
-    ${rocksFalling}
+    ${sea}${waves}
     <g class="island">
-      ${under}${rim}${island}${grass}
+      ${rim}${island}${grass}
       ${pond(505, 322)}
       ${pine(112, 262, 1)}${pine(150, 282, .8)}${cactus(668, 268)}${cactus(640, 292)}${rock(300, 318, 1)}${rock(690, 296, .8)}
       ${place('c-state', 'state', 400, 182, state())}
