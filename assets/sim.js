@@ -129,7 +129,16 @@
     const mk = el('marker', { id: 'arrow', viewBox: '0 0 10 10', refX: 9, refY: 5, markerWidth: 7, markerHeight: 7, orient: 'auto-start-reverse' }, defs);
     el('path', { d: 'M0 0L10 5L0 10z', fill: '#8a807d' }, mk);
 
-    el('rect', { width: 640, height: 640, fill: '#fff' }, svg);
+    // 네 주체가 서 있는 섬 (팔각형 윗면 + 아래 테두리)
+    const ring = [0, 1, 2, 3, 4, 5, 6, 7].map(i => {
+      const a = Math.PI / 8 + i * Math.PI / 4;
+      return [320 + Math.cos(a) * 300, 300 + Math.sin(a) * 175];
+    });
+    const pts = (a, dy = 0) => a.map(([x, y]) => `${x.toFixed(1)},${(y + dy).toFixed(1)}`).join(' ');
+    el('polygon', { points: pts(ring, 26), class: 'island-rim' }, svg);
+    el('polygon', { points: pts(ring), class: 'island-top' }, svg);
+    el('ellipse', { cx: 150, cy: 360, rx: 70, ry: 26, class: 'island-grass' }, svg);
+    el('ellipse', { cx: 500, cy: 210, rx: 60, ry: 20, class: 'island-grass' }, svg);
 
     M.edges.forEach(e => {
       const a = nodeById[e.from], b = nodeById[e.to];
@@ -295,4 +304,6 @@
   buildGraph();
   buildControls();
   reset();
+  window.SimResearch = { pause: stopAuto }; // 전체화면 안내가 뜨면 자동 재생을 멈춘다
+
 })();

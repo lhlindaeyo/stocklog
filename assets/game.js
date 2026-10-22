@@ -17,6 +17,9 @@
     });
     $('gameMode').hidden = mode !== 'game';
     $('researchMode').hidden = mode !== 'research';
+    $('modeHint').textContent = mode === 'game'
+      ? '한 주체가 되어 세 번의 선택으로 위기를 넘기세요'
+      : '충격을 넣고 정책으로 20턴을 버티세요';
   }
   document.querySelectorAll('.mode-tab').forEach(b => b.addEventListener('click', () => {
     history.replaceState(null, '', '#' + b.dataset.mode);
@@ -44,9 +47,9 @@
     }).join('')}</div>`;
   }
 
-  // 화면이 바뀔 때 게임 영역 위쪽이 화면 밖이면 다시 보이게
+  // 화면이 바뀌면 게임 창을 맨 위로
   function keepInView() {
-    if (root.getBoundingClientRect().top < 0) root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    $('gameWindow').scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   /* 1) 역할 선택 */
