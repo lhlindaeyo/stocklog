@@ -4,20 +4,13 @@ body.sim-page { height: 100vh; display: flex; flex-direction: column; overflow: 
 body.sim-page > header { flex: none; }
 .sim-world { position: relative; flex: 1; min-height: 0; overflow: hidden; isolation: isolate; }
 
-/* ---------- 배경: 하늘 · 해 · 구름 · 흐르는 바다 ---------- */
-.sw-bg { position: absolute; inset: 0; z-index: -1; background: linear-gradient(#a9c8e0 0%, #dce9f2 52%, #eef4f7 60%); overflow: hidden; }
-.sw-sun { position: absolute; left: 50%; top: 56%; width: 220px; height: 220px; margin: -110px 0 0 -110px; border-radius: 50%; background: radial-gradient(circle, rgba(255,246,222,.95) 0 34%, rgba(255,240,210,0) 70%); }
-.sw-cloud { position: absolute; height: 26px; border-radius: 99px; background: #fff; opacity: .8; animation: sw-drift 60s linear infinite; }
-.sw-cloud::before { content: ''; position: absolute; left: 22%; bottom: 40%; width: 46%; height: 150%; border-radius: 50%; background: inherit; }
-.sw-cloud.k1 { top: 12%; width: 150px; animation-duration: 70s; animation-delay: -20s; }
-.sw-cloud.k2 { top: 26%; width: 110px; opacity: .65; animation-duration: 90s; animation-delay: -60s; }
-.sw-cloud.k3 { top: 7%; width: 190px; opacity: .7; animation-duration: 110s; animation-delay: -5s; }
-@keyframes sw-drift { from { transform: translateX(-260px); } to { transform: translateX(calc(100vw + 260px)); } }
-.sw-sea { position: absolute; left: 0; right: 0; top: 58%; bottom: 0; perspective: 300px; perspective-origin: 50% 0; overflow: hidden; background: linear-gradient(#9fd0e0, #4f97b8); }
-.sw-sea-plane { position: absolute; left: -50%; right: -50%; top: 0; height: 400%; transform-origin: 50% 0; transform: rotateX(72deg);
-  background: repeating-linear-gradient(0deg, rgba(255,255,255,.28) 0 2px, transparent 2px 60px), repeating-linear-gradient(90deg, rgba(255,255,255,.14) 0 2px, transparent 2px 80px);
-  animation: sw-sail 3s linear infinite; }
-@keyframes sw-sail { to { background-position: 0 60px, 0 0; } }
+/* ---------- 배경: 하얀 도시 + 가장자리 안개 (색은 캐릭터에만) ---------- */
+.sw-bg { position: absolute; inset: 0; z-index: -1; background: #e6e9ee; overflow: hidden; }
+.sw-city { position: absolute; inset: -3%; width: 106%; height: 106%; animation: sw-pan 50s ease-in-out infinite alternate; }
+@keyframes sw-pan { from { transform: translate(-1.5%, -1%); } to { transform: translate(1.5%, 1%); } }
+.sw-bg::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(rgba(246,247,250,.9), rgba(246,247,250,0) 22%, rgba(246,247,250,0) 80%, rgba(246,247,250,.75)),
+    radial-gradient(ellipse at center, rgba(255,255,255,.35), rgba(255,255,255,0) 60%); }
 
 /* ---------- 상단 모드 선택 ---------- */
 .sw-topbar { position: absolute; top: 14px; left: 24px; right: 24px; z-index: 3; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; pointer-events: none; }
@@ -69,9 +62,9 @@ body.sim-page > header { flex: none; }
 .sim-world .controls .btn:not(.primary) { background: rgba(255,255,255,.9); }
 .sim-world .sim-notice { margin: 0; background: rgba(255,255,255,.7); font-size: .74rem; }
 .sim-world .log { max-height: 220px; }
-#graph .island-top { fill: #efd49d; }
-#graph .island-rim { fill: #c99a5f; }
-#graph .island-grass { fill: #aed16f; opacity: .7; }
+#graph .island-top { fill: #fbfbfd; }
+#graph .island-rim { fill: #dcdfe6; filter: drop-shadow(0 18px 22px rgba(60,70,90,.18)); }
+#graph .island-grass { fill: #eceef3; }
 
 /* ---------- 전체화면 안내 ---------- */
 .sw-gate { position: absolute; inset: 0; z-index: 20; display: grid; place-items: center; padding: 24px; background: rgba(20,16,15,.55); backdrop-filter: blur(8px); }
@@ -83,5 +76,5 @@ body.sim-page > header { flex: none; }
 .sw-gate small { display: block; margin-top: 12px; font-family: var(--font-label); color: var(--muted); font-size: .8rem; }
 
 @media (prefers-reduced-motion: reduce) {
-  .sim-world .float-panel, .sw-cloud, .sw-sea-plane { animation: none; }
+  .sim-world .float-panel, .sw-city { animation: none; }
 }
