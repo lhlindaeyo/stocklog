@@ -13,14 +13,15 @@ posts/
   note/_stock_template.md          # Note 템플릿 - 종목 분석 (Question → Conclusion)
   note/_industry_template.md       # Note 템플릿 - 산업 구조 (부품별 카드)
   note/_market_template.md         # Note 템플릿 - 시장 분석 (정책/금리: 사건 → 배경 → 전망)
-  method/_template.md              # Method 템플릿 (논문 기반, 수식 포함)
+  note/_portfolio_template.md      # Note 템플릿 - 포트폴리오 기록 (뭘 샀나 → 왜 샀나 → 왜 팔았나)
+  method/_method-template.md              # Method 템플릿 (논문 기반, 수식 포함)
   index.json                       # 자동 생성 (직접 수정 X)
 tools/build_posts.py               # index.json 생성 스크립트
 ```
 
 ## 글 올리기
 
-1. `posts/note/`(`_stock_template.md` / `_industry_template.md` / `_market_template.md`) 또는 `posts/method/`(`_template.md`)의 템플릿을 복사해 `_` 없는 이름으로 저장 (예: `posts/method/fama-french-3.md`)
+1. `posts/note/`(`_stock_template.md` / `_industry_template.md` / `_market_template.md` / `_portfolio_template.md`) 또는 `posts/method/`(`_method-template.md`)의 템플릿을 복사해 `_` 없는 이름으로 저장 (예: `posts/method/fama-french-3.md`)
 2. 아래 세 줄을 실행합니다. 커밋할 때 `posts/index.json`이 자동으로 갱신되어 함께 올라가고, 1분쯤 뒤 사이트에 반영됩니다.
 
 ```bash
@@ -35,7 +36,7 @@ Method 글에서는 수식을 `$...$`(문장 속), `$$...$$`(별행)로 쓸 수 
 
 로컬에서 확인할 때는 `python tools/build_posts.py` 실행 후 `python -m http.server`로 여세요.
 
-글 맨 위에 `category: 산업분석`(큰 부류: 산업분석/시장분석/종목분석 중 하나)과 `keywords: 반도체, HBM`(작은 부류: 쉼표로 여러 개)을 적으면, Note/Method 목록 페이지에 분류 버튼 두 줄이 생깁니다. 큰 부류를 고른 뒤 작은 부류를 눌러 좁혀 볼 수 있습니다.
+글 맨 위에 `category: 산업분석`(큰 부류. Note는 산업분석/시장분석/종목분석/포트폴리오, Method는 알파/가격결정모형/시뮬레이션 중 하나)과 `keywords: 반도체, HBM`(작은 부류: 쉼표로 여러 개)을 적으면, Note/Method 목록 페이지에 분류 버튼 두 줄이 생깁니다. 큰 부류를 고른 뒤 작은 부류를 눌러 좁혀 볼 수 있습니다.
 
 ## 시뮬레이션
 

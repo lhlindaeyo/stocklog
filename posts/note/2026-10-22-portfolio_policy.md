@@ -2,7 +2,7 @@
 title: 주식 매수/매도 원칙
 date: 2026-10-22
 category: 포트폴리오
-keywords: 기본원칙, 매수, 매도, 리밸런싱
+keywords: 기본원칙
 summary: 개인 주식 매수, 매도 및 리밸런싱 원칙
 ---
 
