@@ -69,14 +69,15 @@ body.sim-page > header { flex: none; }
 /* ---------- 전체화면 안내 ---------- */
 .sw-gate { position: absolute; inset: 0; z-index: 20; display: grid; place-items: center; padding: 24px; background: rgba(20,16,15,.55); backdrop-filter: blur(8px); }
 .sw-gate[hidden] { display: none; }
-.sw-gate-box { max-width: 440px; word-break: keep-all; padding: 34px 32px 28px; text-align: center; background: #fff; border-radius: 20px; border-top: 6px solid var(--accent); box-shadow: 0 24px 60px rgba(0,0,0,.3); }
+.sw-gate-box { max-width: 440px; word-break: keep-all; padding: 34px 32px 28px; text-align: center; background: #fff; border-radius: 20px; box-shadow: 0 24px 60px rgba(0,0,0,.3); }
 /* 창이 화면을 채우면 안내가 조용히 사라진다 (첫 그리기 뒤에만 전환 효과) */
 .sw-gate.ready { transition: opacity .2s ease, visibility .2s; }
 .sw-gate.off { opacity: 0; visibility: hidden; pointer-events: none; }
 .sw-gate-key { margin: 0 0 6px; }
 .sw-gate-key[hidden] { display: none; }
-.sw-gate kbd { display: inline-block; min-width: 72px; padding: 10px 16px; border: 1px solid var(--line); border-bottom-width: 4px; border-radius: 12px; background: var(--panel); font-family: var(--font-label); font-weight: 800; font-size: 1.15rem; color: var(--ink); animation: sw-press 1.8s ease-in-out infinite; }
-@keyframes sw-press { 50% { transform: translateY(2px); border-bottom-width: 2px; margin-bottom: 2px; } }
+.sw-gate kbd { display: inline-block; min-width: 72px; padding: 10px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); box-shadow: 0 3px 0 var(--line); font-family: var(--font-label); font-weight: 800; font-size: 1.15rem; color: var(--ink); animation: sw-press 1.8s ease-in-out infinite; }
+/* 레이아웃을 건드리지 않는 transform·그림자만 움직여야 가운데 정렬된 상자가 흔들리지 않는다 */
+@keyframes sw-press { 50% { transform: translateY(2px); box-shadow: 0 1px 0 var(--line); } }
 .sw-gate-icon { font-size: 2.4rem; line-height: 1; color: var(--accent); }
 .sw-gate h2 { margin: 12px 0 8px; font-family: var(--font-label); font-size: 1.45rem; }
 .sw-gate p { margin: 0 0 18px; color: var(--muted); }
