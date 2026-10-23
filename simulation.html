@@ -15,6 +15,16 @@
   <link rel="stylesheet" href="assets/sim-world.css" />
 </head>
 <body class="sim-page">
+  <script>
+    // 이 기기의 스크롤바 폭 (겹쳐 뜨는 스크롤바면 0)
+    (function () {
+      const probe = document.createElement('div');
+      probe.style.cssText = 'position:absolute;top:-99px;width:50px;height:50px;overflow:scroll';
+      document.body.appendChild(probe);
+      document.documentElement.style.setProperty('--sbw', probe.offsetWidth - probe.clientWidth + 'px');
+      probe.remove();
+    })();
+  </script>
   <header>
     <div class="container nav">
       <a class="brand" href="index.html#home" aria-label="Investment Log 홈">

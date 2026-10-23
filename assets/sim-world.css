@@ -1,7 +1,10 @@
 /* Simulation 게임 세계 — 상단 바 아래 전체를 하나의 게임 화면으로 씁니다.
    sim.css / game.css 의 부품을 그대로 쓰고, 배치와 "떠 있는" 느낌만 여기서 덧씌웁니다. */
 body.sim-page { height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-body.sim-page > header { flex: none; }
+/* 게임 화면은 오른쪽에 빈 스크롤바 자리를 두지 않는다. 대신 상단 바에만 그 폭(--sbw)을 채워
+   다른 탭과 로고·메뉴 위치를 맞춘다 */
+html:has(> body.sim-page) { scrollbar-gutter: auto; }
+body.sim-page > header { flex: none; padding-right: var(--sbw, 0px); }
 .sim-world { position: relative; flex: 1; min-height: 0; overflow: hidden; isolation: isolate; }
 
 /* ---------- 배경: 하얀 도시 + 가장자리 안개 (색은 캐릭터에만) ---------- */
