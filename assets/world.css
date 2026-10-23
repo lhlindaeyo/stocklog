@@ -1,6 +1,6 @@
 .world { position: relative; border-radius: 22px; overflow: hidden; border: 1px solid var(--line); background: #cfe0ec; }
 .world svg { display: block; width: 100%; height: auto; }
-.world-tip { position: absolute; z-index: 5; width: 270px; padding: 14px 16px; background: #fff; border: 1px solid var(--line); border-top: 4px solid var(--accent); border-radius: 12px; box-shadow: 0 10px 30px rgba(20,16,15,.18); pointer-events: none; }
+.world-tip { position: absolute; z-index: 5; width: 270px; padding: 14px 16px; background: #fff; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 10px 30px rgba(20,16,15,.18); pointer-events: none; }
 .world-tip[hidden] { display: none; }
 .world-tip b { font-family: var(--font-label); font-size: 1.05rem; }
 .world-tip p { margin: 6px 0 8px; font-size: .86rem; color: var(--ink); line-height: 1.55; }
