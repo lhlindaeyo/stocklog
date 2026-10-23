@@ -1,6 +1,5 @@
 .quiz { padding: 56px 0 90px; max-width: 760px; }
-.quiz h1 { font-size: clamp(2rem, 5vw, 3rem); margin: 14px 0 8px; }
-.quiz .lead { color: var(--muted); margin: 0 0 24px; }
+.quiz h1 { font-size: clamp(2rem, 5vw, 3rem); margin: 14px 0 24px; }
 .quiz .chips { margin-bottom: 20px; }
 .quiz-bar { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: .85rem; margin-bottom: 8px; }
 .quiz-progress { height: 4px; background: var(--panel-2); border-radius: 4px; overflow: hidden; margin-bottom: 26px; }
