@@ -1,5 +1,16 @@
 [
   {
+    "slug": "method/2026-11-08-ts-forecasting-architectures",
+    "title": "시계열 파운데이션 모델은 어떻게 미래를 예측할까?",
+    "date": "2026-11-08",
+    "type": "method",
+    "category": "모델링",
+    "keywords": [
+      "시계열데이터"
+    ],
+    "summary": "PatchTST, TimesFM, Chronos-2, TiRex, Timestral까지 시계열 예측 모델의 구조를 패치, 어텐션 방식, 마스킹, 공변량 순서로 그림과 함께 정리했다."
+  },
+  {
     "slug": "note/2026-10-22-financial-indicators",
     "title": "금융지표 20개로 시장의 온도 재기",
     "date": "2026-10-22",
