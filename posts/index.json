@@ -11,6 +11,29 @@
     "summary": "PatchTST, TimesFM, Chronos-2, TiRex, Timestral까지 시계열 예측 모델의 구조를 패치, 어텐션 방식, 마스킹, 공변량 순서로 그림과 함께 정리했다."
   },
   {
+    "slug": "note/2026-10-22-portfolio_policy",
+    "title": "주식 매수/매도 원칙",
+    "date": "2026-10-22",
+    "type": "note",
+    "category": "포트폴리오",
+    "keywords": [
+      "기본원칙"
+    ],
+    "summary": "개인 주식 매수, 매도 및 리밸런싱 원칙"
+  },
+  {
+    "slug": "note/2026-10-22-Q3-portfolio",
+    "title": "포트폴리오 설정",
+    "date": "2026-10-22",
+    "type": "note",
+    "category": "포트폴리오",
+    "keywords": [
+      "2026",
+      "Q3"
+    ],
+    "summary": "2026 3분기 포트폴리오"
+  },
+  {
     "slug": "note/2026-10-22-financial-indicators",
     "title": "금융지표 20개로 시장의 온도 재기",
     "date": "2026-10-22",
@@ -34,29 +57,6 @@
       "체크리스트"
     ],
     "summary": "『최소한의 경제공부』를 읽고 반도체부터 필수소비재까지 산업마다 종목을 고를 때 확인할 질문을 정리했다."
-  },
-  {
-    "slug": "note/2026-10-22-portfolio_policy",
-    "title": "주식 매수/매도 원칙",
-    "date": "2026-10-22",
-    "type": "note",
-    "category": "포트폴리오",
-    "keywords": [
-      "기본원칙"
-    ],
-    "summary": "개인 주식 매수, 매도 및 리밸런싱 원칙"
-  },
-  {
-    "slug": "note/2026-10-22-Q3-portfolio",
-    "title": "포트폴리오 설정",
-    "date": "2026-10-22",
-    "type": "note",
-    "category": "포트폴리오",
-    "keywords": [
-      "2026",
-      "Q3"
-    ],
-    "summary": "2026 3분기 포트폴리오"
   },
   {
     "slug": "note/2026-10-22-real-estate-basics",
