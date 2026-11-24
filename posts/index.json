@@ -1,5 +1,18 @@
 [
   {
+    "slug": "note/2026-11-25-nov-macro-sentiment",
+    "title": "11월 거시경제·투자심리 진단: 실물은 버티는데 시장은 공포다",
+    "date": "2026-11-25",
+    "type": "note",
+    "category": "시장분석",
+    "keywords": [
+      "매크로",
+      "투자심리",
+      "월간점검"
+    ],
+    "summary": "한국·미국 거시지표와 CNN 공포탐욕·AAII·VIX·하이일드 스프레드로 11월 시장을 진단했다. 실물 성장과 시장 가격의 괴리, 극단적 공포가 바닥 신호인지 따져 봤다."
+  },
+  {
     "slug": "method/2026-11-08-ts-forecasting-architectures",
     "title": "시계열 파운데이션 모델은 어떻게 미래를 예측할까?",
     "date": "2026-11-08",
